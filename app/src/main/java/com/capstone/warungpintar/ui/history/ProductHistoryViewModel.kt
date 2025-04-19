@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstone.warungpintar.data.ResultState
 import com.capstone.warungpintar.data.remote.model.response.HistoryResponse
-import com.capstone.warungpintar.data.repository.ProductRepository
+import com.capstone.warungpintar.data.repository.ProductRepositoryOld
 import kotlinx.coroutines.launch
 
-class ProductHistoryViewModel(private val productRepository: ProductRepository) : ViewModel() {
+class ProductHistoryViewModel(private val productRepositoryOld: ProductRepositoryOld) : ViewModel() {
 
     private var _listHistory: MutableLiveData<ResultState<List<HistoryResponse>>> =
         MutableLiveData()
@@ -17,7 +17,7 @@ class ProductHistoryViewModel(private val productRepository: ProductRepository) 
 
     fun getListHistory(email: String) {
         viewModelScope.launch {
-            productRepository.getListHistories(email).collect { result ->
+            productRepositoryOld.getListHistories(email).collect { result ->
                 _listHistory.value = result
             }
         }

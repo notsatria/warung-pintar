@@ -25,9 +25,10 @@ import com.capstone.warungpintar.ui.addproduct.AddScannerActivity.Companion.CAME
 import com.capstone.warungpintar.utils.ImageUtils
 import com.capstone.warungpintar.utils.Validation
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
-
+@AndroidEntryPoint
 class AddProductInActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddProductInBinding
     private lateinit var bindingDialog: DialogResultScannerLayoutBinding
@@ -36,9 +37,7 @@ class AddProductInActivity : AppCompatActivity() {
     private var currentImageUriForProduct: Uri? = null
     private var expiredDate = ""
 
-    private val viewModel: AddProductViewModel by viewModels {
-        AddProductViewModelFactory.getInstance()
-    }
+    private val viewModel: AddProductViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +56,7 @@ class AddProductInActivity : AppCompatActivity() {
             )
         }
 
-        setupAction()
+        binding.setupAction()
 
         viewModel.resultUpload.observe(this) { result ->
             if (result != null) {
@@ -105,43 +104,33 @@ class AddProductInActivity : AppCompatActivity() {
 
     }
 
-    private fun setupAction() {
-        binding.btnAddproductClose.setOnClickListener {
+    private fun ActivityAddProductInBinding.setupAction() {
+        btnAddproductClose.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.btnAddGambar.setOnClickListener {
+        btnAddGambar.setOnClickListener {
             checkCameraPermissionForImage()
         }
 
-        binding.kodestockEditTextLayout.setOnClickListener {
+        kodestockEditTextLayout.setOnClickListener {
             showDialog()
         }
 
-        binding.tglmasuklEditText.setOnClickListener {
-            val year = Calendar.getInstance().get(Calendar.YEAR)
-            val month = Calendar.getInstance().get(Calendar.MONTH)
-            val dayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        tglmasuklEditText.setOnClickListener {
+            showDateDialog { view, year, month, dayOfMonth ->
+                val selectedDate = "$dayOfMonth/${month + 1}/$year"
 
-            val datePickerDialog = DatePickerDialog(
-                this,
-                { view, year, month, dayOfMonth ->
-                    val selectedDate = "$dayOfMonth/${month + 1}/$year"
-
-                    binding.tglmasuklEditText.setText(selectedDate)
-                },
-                year,
-                month,
-                dayOfMonth
-            )
-
-            datePickerDialog.datePicker.minDate = System.currentTimeMillis()
-
-            datePickerDialog.show()
+                tglmasuklEditText.setText(selectedDate)
+            }
         }
 
-        binding.btnUpload.setOnClickListener {
+        btnUpload.setOnClickListener {
             uploadProduct()
+        }
+
+        kategoribrgliEditText.setOnClickListener {
+            showKategoriListDialog()
         }
     }
 
@@ -170,20 +159,19 @@ class AddProductInActivity : AppCompatActivity() {
             showMessage("Masukan data dengan lengkap!")
         } else {
             val imageFile = ImageUtils.uriToFile(currentImageUriForProduct!!, this)
-            val productRequest: ProductRequest = ProductRequest(
+
+            Log.d(TAG, "uploadProduct: image file: $imageFile")
+
+            viewModel.insertProductIn(
                 namaBarang,
                 tglMasuk,
-                kategori,
                 jmlMasuk.toInt(),
                 stokRendah.toInt(),
                 expiredDate,
                 hargaBeli.toInt(),
-                hargaJual.toInt()
+                hargaJual.toInt(),
+                imageFile.path
             )
-            Log.d(TAG, "uploadProduct: image file: $imageFile")
-            Log.d(TAG, "uploadProduct: product request: $productRequest")
-
-            viewModel.upload(imageFile, productRequest)
         }
     }
 
@@ -289,6 +277,7 @@ class AddProductInActivity : AppCompatActivity() {
         bindingDialog = DialogResultScannerLayoutBinding.inflate(layoutInflater)
         val buttonScan = bindingDialog.btnScanOcr
         val buttonResult = bindingDialog.btnSave
+        val etExpiredDate = bindingDialog.etExpiredDate
 
         val alertDialog = MaterialAlertDialogBuilder(this)
             .setView(bindingDialog.root)
@@ -296,6 +285,14 @@ class AddProductInActivity : AppCompatActivity() {
 
         uri?.let {
             bindingDialog.ivResultScan.setImageURI(it)
+        }
+
+        etExpiredDate.setOnClickListener {
+            showDateDialog { view, year, month, dayOfMonth ->
+                val selectedDate = "$dayOfMonth/${month + 1}/$year"
+
+                etExpiredDate.setText(selectedDate)
+            }
         }
 
         buttonScan.setOnClickListener {
@@ -328,6 +325,35 @@ class AddProductInActivity : AppCompatActivity() {
         }
 
         alertDialog.show()
+    }
+
+    private fun showKategoriListDialog() {
+        val dialog = MaterialAlertDialogBuilder(this@AddProductInActivity).apply {
+            setTitle("Kategori")
+            setItems(viewModel.categories.map { it.namaKategori }.toTypedArray()) { _, index ->
+                binding.kategoribrgliEditText.setText(viewModel.categories[index].namaKategori)
+                viewModel.selectedCategory = viewModel.categories[index]
+            }
+        }
+        dialog.show()
+    }
+
+    private fun showDateDialog(onDateSetListener: DatePickerDialog.OnDateSetListener) {
+        val year = Calendar.getInstance().get(Calendar.YEAR)
+        val month = Calendar.getInstance().get(Calendar.MONTH)
+        val dayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            this,
+            onDateSetListener,
+            year,
+            month,
+            dayOfMonth
+        )
+
+        datePickerDialog.datePicker.minDate = System.currentTimeMillis()
+
+        datePickerDialog.show()
     }
 
     companion object {

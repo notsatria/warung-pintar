@@ -2,16 +2,16 @@ package com.capstone.warungpintar.ui.history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.capstone.warungpintar.data.repository.ProductRepository
+import com.capstone.warungpintar.data.repository.ProductRepositoryOld
 import com.capstone.warungpintar.di.Injection
 
-class ProductHistoryViewModelFactory(private val productRepository: ProductRepository) :
+class ProductHistoryViewModelFactory(private val productRepositoryOld: ProductRepositoryOld) :
     ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ProductHistoryViewModel::class.java)) {
-            return ProductHistoryViewModel(productRepository) as T
+            return ProductHistoryViewModel(productRepositoryOld) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

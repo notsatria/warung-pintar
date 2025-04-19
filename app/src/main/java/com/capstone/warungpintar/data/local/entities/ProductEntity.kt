@@ -20,12 +20,13 @@ data class ProductEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val nama: String,
     val jumlah: Int,
-    val lowStock: Boolean,
-    val expired: String?,
+    val lowStock: Int,
+    val expired: String,
     val hargaBeli: Int,
     val hargaJual: Int,
     val imagePath: String?,
-    val kategoriId: Int
+    val kategoriId: Int,
+    val tanggalMasuk: String
 )
 
 
@@ -33,5 +34,5 @@ data class ProductEntity(
 interface ProductDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(obj: ProductEntity)
+    suspend fun insert(obj: ProductEntity): Long
 }

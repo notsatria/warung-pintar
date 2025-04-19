@@ -23,7 +23,7 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
             if (user != null) {
                 loginResult.value = ResultState.Success(user)
             } else {
-                loginResult.value = ResultState.Error("Login gagal")
+                loginResult.value = ResultState.Error("Login gagal, pengguna tidak ditemukan")
             }
         }
     }

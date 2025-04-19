@@ -2,6 +2,7 @@ package com.capstone.warungpintar.di
 
 import android.content.Context
 import com.capstone.warungpintar.data.local.AppDatabase
+import com.capstone.warungpintar.data.local.entities.CategoryDao
 import com.capstone.warungpintar.data.local.entities.ProductDao
 import com.capstone.warungpintar.data.local.entities.ProductOutDao
 import com.capstone.warungpintar.data.local.entities.ProductInDao
@@ -38,4 +39,7 @@ class DatabaseModule {
 
     @Provides
     fun provideNotifikasiDao(db: AppDatabase): NotificationDao = db.notifikasiDao()
+
+    @Provides
+    fun provideCategoryDao(db: AppDatabase): CategoryDao = db.kategoriDao()
 }

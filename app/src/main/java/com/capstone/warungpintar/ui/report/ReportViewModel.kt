@@ -6,17 +6,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstone.warungpintar.data.ResultState
 import com.capstone.warungpintar.data.remote.model.response.ReportResponse
-import com.capstone.warungpintar.data.repository.ProductRepository
+import com.capstone.warungpintar.data.repository.ProductRepositoryOld
 import kotlinx.coroutines.launch
 
-class ReportViewModel(private val productRepository: ProductRepository) : ViewModel() {
+class ReportViewModel(private val productRepositoryOld: ProductRepositoryOld) : ViewModel() {
 
     private var _listReport: MutableLiveData<ResultState<List<ReportResponse>>> = MutableLiveData()
     val listReport: LiveData<ResultState<List<ReportResponse>>> get() = _listReport
 
     fun getListReport(email: String) {
         viewModelScope.launch {
-            productRepository.getListReport(email).collect { result ->
+            productRepositoryOld.getListReport(email).collect { result ->
                 _listReport.value = result
             }
         }

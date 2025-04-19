@@ -2,16 +2,16 @@ package com.capstone.warungpintar.ui.deleteproduct
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.capstone.warungpintar.data.repository.ProductRepository
+import com.capstone.warungpintar.data.repository.ProductRepositoryOld
 import com.capstone.warungpintar.di.Injection
 
-class DeleteProductViewModelFactory(private val productRepository: ProductRepository) :
+class DeleteProductViewModelFactory(private val productRepositoryOld: ProductRepositoryOld) :
     ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DeleteProductViewModel::class.java)) {
-            return DeleteProductViewModel(productRepository) as T
+            return DeleteProductViewModel(productRepositoryOld) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

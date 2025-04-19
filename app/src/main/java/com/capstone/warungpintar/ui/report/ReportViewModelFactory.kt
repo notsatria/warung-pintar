@@ -2,16 +2,16 @@ package com.capstone.warungpintar.ui.report
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.capstone.warungpintar.data.repository.ProductRepository
+import com.capstone.warungpintar.data.repository.ProductRepositoryOld
 import com.capstone.warungpintar.di.Injection
 
-class ReportViewModelFactory(private val productRepository: ProductRepository) :
+class ReportViewModelFactory(private val productRepositoryOld: ProductRepositoryOld) :
     ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ReportViewModel::class.java)) {
-            return ReportViewModel(productRepository) as T
+            return ReportViewModel(productRepositoryOld) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

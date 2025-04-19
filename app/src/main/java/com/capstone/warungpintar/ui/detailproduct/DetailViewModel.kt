@@ -6,17 +6,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstone.warungpintar.data.ResultState
 import com.capstone.warungpintar.data.model.Product
-import com.capstone.warungpintar.data.repository.ProductRepository
+import com.capstone.warungpintar.data.repository.ProductRepositoryOld
 import kotlinx.coroutines.launch
 
-class DetailViewModel(private val productRepository: ProductRepository) : ViewModel() {
+class DetailViewModel(private val productRepositoryOld: ProductRepositoryOld) : ViewModel() {
 
     private var _resultDetail: MutableLiveData<ResultState<Product>> = MutableLiveData()
     val resultDetail: LiveData<ResultState<Product>> get() = _resultDetail
 
     fun getDetailProductById(productId: Int) {
         viewModelScope.launch {
-            productRepository.getDetailProduct(productId).collect { result ->
+            productRepositoryOld.getDetailProduct(productId).collect { result ->
                 _resultDetail.value = result
             }
         }

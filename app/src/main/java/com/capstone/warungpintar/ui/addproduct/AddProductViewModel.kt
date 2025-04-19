@@ -5,34 +5,79 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstone.warungpintar.data.ResultState
-import com.capstone.warungpintar.data.remote.model.request.ProductRequest
+import com.capstone.warungpintar.data.local.entities.CategoryEntity
+import com.capstone.warungpintar.data.local.entities.ProductEntity
 import com.capstone.warungpintar.data.repository.ProductRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
+import javax.inject.Inject
 
-class AddProductViewModel(private val productRepository: ProductRepository) : ViewModel() {
+@HiltViewModel
+class AddProductViewModel @Inject constructor(private val productRepository: ProductRepository) :
+    ViewModel() {
 
-    private var _resultUpload: MutableLiveData<ResultState<String>> = MutableLiveData()
-    val resultUpload: LiveData<ResultState<String>> get() = _resultUpload
+    val resultUpload = MutableLiveData<ResultState<String>>()
 
+    var categories = emptyList<CategoryEntity>()
+
+    var selectedCategory: CategoryEntity? = null
 
     private var _resultOCR: MutableLiveData<ResultState<String>> = MutableLiveData()
     val resultOCR: LiveData<ResultState<String>> get() = _resultOCR
 
-    fun upload(imageFile: File, product: ProductRequest) {
+    init {
+        getCategories()
+    }
+
+    fun getCategories() {
         viewModelScope.launch {
-            productRepository.postProduct(imageFile, product).collect { result ->
-                _resultUpload.value = result
+            productRepository.getCategories().collect { result ->
+                categories = result
             }
         }
     }
 
+    fun insertProductIn(
+        namaBarang: String,
+        tglMasuk: String,
+        jmlMasuk: Int,
+        stokRendah: Int,
+        expiredDate: String,
+        hargaBeli: Int,
+        hargaJual: Int,
+        imagePath: String?
+    ) {
+        val product = ProductEntity(
+            nama = namaBarang,
+            lowStock = stokRendah,
+            jumlah = jmlMasuk,
+            expired = expiredDate,
+            hargaBeli = hargaBeli,
+            hargaJual = hargaJual,
+            imagePath = imagePath,
+            tanggalMasuk = tglMasuk,
+            kategoriId = selectedCategory!!.id
+        )
+
+        viewModelScope.launch {
+            resultUpload.value = ResultState.Loading
+
+            val res = productRepository.insertProduct(product)
+
+            if (res > 0) {
+                resultUpload.value = ResultState.Success("Berhasil menambahkan barang")
+            } else {
+                resultUpload.value = ResultState.Error("Gagal menambahkan barang")
+            }
+        }
+    }
 
     fun performOCR(imageFile: File) {
         viewModelScope.launch {
-            productRepository.getExpiredFromOCR(imageFile).collect { result ->
-                _resultOCR.value = result
-            }
+//            productRepositoryOld.getExpiredFromOCR(imageFile).collect { result ->
+//                _resultOCR.value = result
+//            }
         }
     }
 }

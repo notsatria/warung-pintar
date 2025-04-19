@@ -4,17 +4,15 @@ import com.capstone.warungpintar.data.remote.api.ApiConfig
 import com.capstone.warungpintar.data.remote.api.ApiDashboardService
 import com.capstone.warungpintar.data.remote.api.ApiNotificationService
 import com.capstone.warungpintar.data.remote.api.ApiProductService
-import com.capstone.warungpintar.data.remote.api.ApiUserService
 import com.capstone.warungpintar.data.repository.DashboardRepository
 import com.capstone.warungpintar.data.repository.NotificationRepository
-import com.capstone.warungpintar.data.repository.ProductRepository
-import com.capstone.warungpintar.data.repository.UserRepository
+import com.capstone.warungpintar.data.repository.ProductRepositoryOld
 
 object Injection {
 
-    fun provideProductRepository(): ProductRepository {
+    fun provideProductRepository(): ProductRepositoryOld {
         val apiProductService = ApiConfig.getApiConfig().create(ApiProductService::class.java)
-        return ProductRepository.getInstance(apiProductService)
+        return ProductRepositoryOld.getInstance(apiProductService)
     }
 
     fun provideNotificationRepository(): NotificationRepository {

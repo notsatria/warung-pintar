@@ -2,15 +2,15 @@ package com.capstone.warungpintar.ui.category
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.capstone.warungpintar.data.repository.ProductRepository
+import com.capstone.warungpintar.data.repository.ProductRepositoryOld
 import com.capstone.warungpintar.di.Injection
 
-class ListCategoryViewModelFactory(private val productRepository: ProductRepository) :
+class ListCategoryViewModelFactory(private val productRepositoryOld: ProductRepositoryOld) :
     ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ListCategoryViewModel::class.java)) {
-            return ListCategoryViewModel(productRepository) as T
+            return ListCategoryViewModel(productRepositoryOld) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

@@ -2,16 +2,16 @@ package com.capstone.warungpintar.ui.liststockproduct
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.capstone.warungpintar.data.repository.ProductRepository
+import com.capstone.warungpintar.data.repository.ProductRepositoryOld
 import com.capstone.warungpintar.di.Injection
 
-class ListStockViewModelFactory(private val productRepository: ProductRepository) :
+class ListStockViewModelFactory(private val productRepositoryOld: ProductRepositoryOld) :
     ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ListStockViewModel::class.java)) {
-            return ListStockViewModel(productRepository) as T
+            return ListStockViewModel(productRepositoryOld) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

@@ -86,6 +86,10 @@
         <activity
             android:name=".ui.deleteproduct.DeleteProductOutActivity"
             android:exported="false" />
+        <activity android:name=".ui.newsproduct.ListNewsActivity"
+            android:exported="false" />
+        <activity android:name=".ui.newsproduct.DetailNewsActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
