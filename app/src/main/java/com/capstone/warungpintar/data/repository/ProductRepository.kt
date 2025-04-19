@@ -1,5 +1,6 @@
 package com.capstone.warungpintar.data.repository
 
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.capstone.warungpintar.data.local.entities.CategoryDao
 import com.capstone.warungpintar.data.local.entities.ProductDao
 import com.capstone.warungpintar.data.local.entities.ProductEntity
@@ -46,4 +47,5 @@ class ProductRepository @Inject constructor(
 
     fun getProductsWithLowStockLength() = productDao.getProductsWithLowStockLength()
 
+    fun getHistoryList() = productInDao.getHistoryList()
 }

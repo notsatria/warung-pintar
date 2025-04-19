@@ -10,24 +10,24 @@ import com.capstone.warungpintar.data.remote.model.response.HistoryResponse
 import com.capstone.warungpintar.databinding.ItemHistoryProductRowBinding
 
 class ProductHistoryAdapter :
-    ListAdapter<HistoryResponse, ProductHistoryAdapter.ProductHistoryViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<HistoryItem, ProductHistoryAdapter.ProductHistoryViewHolder>(DIFF_CALLBACK) {
 
     companion object {
 
         private const val TAG = "ProductHistoryAdapter"
 
-        private val DIFF_CALLBACK: DiffUtil.ItemCallback<HistoryResponse> =
-            object : DiffUtil.ItemCallback<HistoryResponse>() {
+        private val DIFF_CALLBACK: DiffUtil.ItemCallback<HistoryItem> =
+            object : DiffUtil.ItemCallback<HistoryItem>() {
                 override fun areItemsTheSame(
-                    oldItem: HistoryResponse,
-                    newItem: HistoryResponse
+                    oldItem: HistoryItem,
+                    newItem: HistoryItem
                 ): Boolean {
                     return oldItem.historyId == newItem.historyId
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: HistoryResponse,
-                    newItem: HistoryResponse
+                    oldItem: HistoryItem,
+                    newItem: HistoryItem
                 ): Boolean {
                     return oldItem == newItem
                 }
@@ -54,25 +54,39 @@ class ProductHistoryAdapter :
 
     class ProductHistoryViewHolder(val binding: ItemHistoryProductRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: HistoryResponse) {
-            if (data.type.contentEquals("keluar", ignoreCase = true)) {
+        fun bind(data: HistoryItem) {
+            if (data.tipe == HistoryType.KELUAR) {
                 with(binding) {
                     imgHistoryProduct.setImageResource(R.drawable.img_product_out)
-                    tvTitleHistoryItem.text = data.productName
-                    tvPriceItem.text = "Harga Jual ${data.price}"
-                    tvDateItem.text = "Tanggal Keluar ${data.date}"
-                    tvAmountItem.text = data.amount.toString()
+                    tvTitleHistoryItem.text = data.namaBarang
+                    tvPriceItem.text = "Harga Jual Rp.${data.harga}"
+                    tvDateItem.text = "Tanggal Keluar ${data.tanggal}"
+                    tvAmountItem.text = data.jumlah.toString()
                 }
-            } else if (data.type.contentEquals("masuk", ignoreCase = true)) {
+            } else {
                 with(binding) {
                     imgHistoryProduct.setImageResource(R.drawable.img_product_in)
-                    tvTitleHistoryItem.text = data.productName
-                    tvPriceItem.text = "Harga Beli ${data.price}"
-                    tvDateItem.text = "Tanggal Masuk ${data.date}"
-                    tvAmountItem.text = data.amount.toString()
+                    tvTitleHistoryItem.text = data.namaBarang
+                    tvPriceItem.text = "Harga Beli Rp.${data.harga}"
+                    tvDateItem.text = "Tanggal Masuk ${data.tanggal}"
+                    tvAmountItem.text = data.jumlah.toString()
                 }
             }
         }
 
     }
+}
+
+data class HistoryItem(
+    val historyId: Int,
+    val namaBarang: String,
+    val harga: String,
+    val jumlah: Int,
+    val tanggal: String,
+    val tipe: HistoryType
+)
+
+enum class HistoryType {
+    MASUK,
+    KELUAR
 }

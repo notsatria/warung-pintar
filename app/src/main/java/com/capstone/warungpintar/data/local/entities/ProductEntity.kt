@@ -70,6 +70,6 @@ interface ProductDao {
     @Query("SELECT COUNT(id) FROM product")
     fun getProductLength(): Flow<Int>
 
-    @Query("SELECT * FROM product WHERE jumlah <= lowStock")
+    @Query("SELECT COUNT(*) FROM product WHERE jumlah <= lowStock")
     fun getProductsWithLowStockLength(): Flow<Int>
 }
