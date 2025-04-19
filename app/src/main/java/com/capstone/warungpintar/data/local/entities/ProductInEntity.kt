@@ -44,7 +44,7 @@ interface ProductInDao {
         SELECT 
             po.id as historyId,
             p.nama as namaBarang,
-            p.hargaJual as harga,
+            po.hargaJual as harga,
             po.jumlah as jumlah,
             po.tanggalKeluar as tanggal,
             'KELUAR' as tipe

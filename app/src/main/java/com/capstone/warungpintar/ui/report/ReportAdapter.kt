@@ -8,23 +8,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.capstone.warungpintar.data.remote.model.response.ReportResponse
 import com.capstone.warungpintar.databinding.ItemReportRowBinding
 
-class ReportAdapter : ListAdapter<ReportResponse, ReportAdapter.ReportViewHolder>(DIFF_CALLBACK) {
+class ReportAdapter : ListAdapter<ReportItem, ReportAdapter.ReportViewHolder>(DIFF_CALLBACK) {
 
     companion object {
 
         private const val TAG = "ReportAdapter"
 
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ReportResponse>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ReportItem>() {
             override fun areItemsTheSame(
-                oldItem: ReportResponse,
-                newItem: ReportResponse
+                oldItem: ReportItem,
+                newItem: ReportItem
             ): Boolean {
-                return oldItem.productName == newItem.productName
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: ReportResponse,
-                newItem: ReportResponse
+                oldItem: ReportItem,
+                newItem: ReportItem
             ): Boolean {
                 return oldItem == newItem
             }
@@ -51,20 +51,28 @@ class ReportAdapter : ListAdapter<ReportResponse, ReportAdapter.ReportViewHolder
 
     class ReportViewHolder(val binding: ItemReportRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: ReportResponse) {
-            val purchasePrice = data.purchasePrice
-            val sellingPrice = data.sellingPrice
-            val profit = purchasePrice - sellingPrice
+        fun bind(data: ReportItem) {
+            val purchasePrice = data.hargaBeli
+            val sellingPrice = data.hargaJual
 
             with(binding) {
-                tvProductNameRow.text = data.productName
+                tvProductNameRow.text = data.namaBarang
                 tvPurchasePriceRowValue.text = "Rp.$purchasePrice"
                 tvSellingPriceRowValue.text = "Rp. $sellingPrice"
-                tvExitDateRow.text = data.exitDate
+                tvExitDateRow.text = "Tanggal keluar: ${data.tanggalKeluar}"
 
-                tvProfitProductRow.text = "Rp. $profit"
+                tvProfitProductRow.text = "Rp. ${data.total}"
             }
         }
     }
-
 }
+
+data class ReportItem(
+    val id: Int,
+    val namaBarang: String,
+    val hargaJual: Int,
+    val hargaBeli: Int,
+    val total: Int,
+    val jumlah: Int,
+    val tanggalKeluar: String,
+)

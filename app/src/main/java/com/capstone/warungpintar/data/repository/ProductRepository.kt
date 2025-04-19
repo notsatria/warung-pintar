@@ -48,4 +48,6 @@ class ProductRepository @Inject constructor(
     fun getProductsWithLowStockLength() = productDao.getProductsWithLowStockLength()
 
     fun getHistoryList() = productInDao.getHistoryList()
+
+    fun getReportList() = productOutDao.getReportList()
 }
