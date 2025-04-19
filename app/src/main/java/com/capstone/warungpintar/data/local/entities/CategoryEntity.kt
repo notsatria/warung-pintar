@@ -8,24 +8,24 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
-@Entity(tableName = "kategori_barang")
-data class KategoriEntity(
+@Entity(tableName = "category")
+data class CategoryEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val namaKategori: String
 )
 
 @Dao
-interface KategoriDao {
+interface CategoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(kategoriList: List<KategoriEntity>)
+    suspend fun insertAll(kategoriList: List<CategoryEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(kategori: KategoriEntity)
+    suspend fun insert(kategori: CategoryEntity)
 
-    @Query("SELECT * FROM kategori_barang ORDER BY namaKategori ASC")
-    fun getAllKategori(): Flow<List<KategoriEntity>>
+    @Query("SELECT * FROM category ORDER BY namaKategori ASC")
+    fun getAllKategori(): Flow<List<CategoryEntity>>
 
-    @Query("DELETE FROM kategori_barang")
+    @Query("DELETE FROM category")
     suspend fun deleteAll()
 }

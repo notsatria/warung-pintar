@@ -6,18 +6,17 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "barang_keluar")
-data class BarangKeluarEntity(
+@Entity(tableName = "notification")
+data class NotificationEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val barangId: Int,
-    val tanggalKeluar: String,
-    val jumlah: Int,
-    val hargaJual: Int
+    val isi: String,
+    val tanggal: String,
+    val isRead: Boolean = false
 )
 
 @Dao
-interface BarangKeluarDao {
+interface NotificationDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(obj: BarangKeluarEntity)
+    suspend fun insert(obj: NotificationEntity)
 }

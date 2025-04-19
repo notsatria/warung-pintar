@@ -6,5 +6,45 @@
     <string name="ocr_information_dialog">Fitur OCR (Teknologi untuk mengesktrak teks dari gambar) masih dalam tahap pengembangan.
     Pastikan angka terbaca jelas di dalam layar garis kotak kuning!</string>
 
+    <string-array name="data_name">
+        <item>Facial Treatment</item>
+        <item>Eye Treatment</item>
+        <item>Sun Protection</item>
+        <item>Face Mask</item>
+        <item>Moisturizer</item>
+        <item>Cleanser</item>
 
+    </string-array>
+    <string-array name="data_description">
+        <item>Amartha Hangtuah adalah klub basket profesional yang berbasis di Jakarta, Indonesia, dan berpartisipasi dalam National Basketball League (NBL). Klub ini didirikan pada tahun 1995 dan telah mengikuti berbagai kompetisi basket, termasuk Indonesian Basketball League (IBL) dan ASEAN Basketball League (ABL). Pada musim IBL 2017-2018, Amartha Hangtuah berhasil mencapai semifinal, namun kalah dari Satria Muda Pertamina Jakarta.l Association of America (BAA), dan sempat dilatih oleh Red Auerbach.
+        Tim ini telah mengalami perubahan nama dari waktu ke waktu. Awalnya dikenal sebagai Hangtuah, klub ini kemudian mengubah namanya menjadi Hangtuah Sumsel Indonesia Muda pada Februari 2008. Saat ini, tim dikenal dengan nama Amartha Hangtuah karena alasan sponsor. Amartha Hangtuah Jakarta berkompetisi di IBL dan termasuk dalam Divisi Putih.</item>
+        <item>Bima Perkasa Jogja adalah klub basket profesional yang berbasis di Yogyakarta, Indonesia dan berkompetisi dalam Indonesian Basketball League (IBL). Klub ini awalnya didirikan pada tanggal 6 Juni 1988 di Malang, Jawa Timur dengan nama Bima Sakti Malang dan mulai berkompetisi di divisi tertinggi Perbasi sejak musim 1991/1992. Pada tahun 1995, klub basket Bima Sakti disponsori oleh PT Nikko Steel dan mengubah namanya menjadi Bima Sakti Nikko Steel Malang hingga tahun 2016.
+            Prestasi tertinggi mereka adalah mencapai semifinal pada tahun 1995 dan 1996 serta meraih peringkat ketiga.</item>
+        <item>Indonesia Patriots adalah salah satu tim basket di Indonesia yang berkompetisi dalam Indonesian Basketball League (IBL). Tim ini terdaftar sebagai salah satu klub basket di Jakarta. Untuk informasi terkini mengenai jadwal, hasil pertandingan, dan performa pemain Indonesia Patriots, Anda dapat mengunjungi situs web seperti Sofascore. Situs ini menyediakan skor langsung, klasemen, jadwal, dan statistik untuk berbagai turnamen basket yang diikuti oleh Indonesia Patriots.
+            Sebagai bagian dari IBL, Indonesia Patriots berpartisipasi dalam kompetisi basket profesional di Indonesia. IBL adalah liga basket pria profesional terkemuka di Indonesia yang didirikan oleh Perbasi (Persatuan Bola Basket Seluruh Indonesia) pada tahun 2003. </item>
+        <item> Louvre Surabaya adalah tim basket profesional Indonesia yang berbasis di Surabaya, Jawa Timur. Tim ini didirikan pada tahun 2019 dan membuat debutnya dalam musim 2023 ASEAN Basketball League (ABL). Mereka adalah tim keempat dari Indonesia yang bermain di liga tersebut setelah ditolak dalam aplikasi mereka untuk bermain di Indonesian Basketball League (IBL) pada musim 2023.
+            Louvre Surabaya didirikan oleh mantan pemain tim nasional, Denny Sumargo, dan awalnya bermain di IBL. Pada musim 2021, mereka mencapai semifinal liga. Setelah ditolak dalam aplikasi mereka untuk bermain di IBL pada musim 2023, mereka memutuskan untuk bergabung dengan ABL dan menjadi tim keempat dari Indonesia yang bermain di liga tersebut.</item>
+        <item>NSH Jakarta adalah tim basket profesional Indonesia yang berbasis di Jakarta. Tim ini sebelumnya dikenal dengan nama NSH GMC sebelum melakukan merger dengan tim Mountain Gold Timika pada tahun 2020 dan berubah menjadi NSH Mountain Gold Timika.
+            Sejarah NSH Jakarta dapat ditelusuri kembali ke tahun 1994 ketika sekelompok pemuda di kompleks olahraga ex-Gaya Motor Cilincing mendirikan klub basket dengan nama GMC (Gaya Motor Club). Kolaborasi dengan seorang pengusaha timah, Na Sioe Hauw, menghasilkan perubahan nama klub menjadi NSH GMC. NSH GMC berhasil meraih berbagai prestasi di tingkat amatir, termasuk memenangkan kompetisi Divisi II DKI Jakarta pada tahun 2007 dan promosi ke Divisi I DKI Jakarta.</item>
+        <item>Pacific Caesar Surabaya adalah tim basket profesional yang berbasis di Surabaya, Indonesia. Tim ini bergabung dengan NBL Indonesia pada musim 2011-2012. Pacific Caesar Surabaya merupakan salah satu klub basket tertua di Indonesia dan telah berpartisipasi dalam kompetisi basket profesional Indonesia selama beberapa dekade.
+            Pacific Caesar didirikan pada tahun 1968 oleh Bambang Susanto sebagai klub amatir. Tujuan awal pendirian klub ini adalah untuk membuka sekolah basket bagi para pemuda. Setelah berjalan cukup lama, Pacific Caesar memulai debutnya dalam kompetisi basket profesional Indonesia pada tahun 1992 di Kompetisi Basket Utama (Kobatama).</item>
+        <item>Prawira Bandung adalah klub bola basket profesional Indonesia yang berbasis di kota Bandung, Jawa Barat. Klub ini didirikan oleh Lilian Wijaya pada tahun 1991 dengan nama Hadtex Indosyntec. Sejak tahun 1994, Prawira Bandung menjadi anggota divisi teratas Perbasi (Persatuan Bola Basket Seluruh Indonesia). Mereka telah meraih gelar juara pada tahun 1994, 1997, dan 1998^[0^]. Pada tahun 2023, Prawira Harum Bandung berhasil menjadi juara Indonesia Basketball League (IBL) dengan mengalahkan Pelita Jaya Bakrie Jakarta.
+            Prawira Bandung memiliki sejarah yang panjang dalam kompetisi bola basket di Indonesia. Mereka sering mencapai babak final sejak tahun 1994 dan telah meraih empat gelar juara.</item>
+        <item>Satria Muda Pertamina adalah klub bola basket profesional yang berasal dari Jakarta dan bermain dalam Liga Bola Basket Indonesia (IBL). Klub ini didirikan pada tanggal 28 Oktober 1993 dan berada di bawah naungan PT. Indonesia Sport Venture. Satria Muda Pertamina telah meraih sejumlah prestasi dan gelar juara dalam kompetisi bola basket di Indonesia. Mereka telah menjadi juara IBL pada tahun 2021 dengan mengalahkan Pelita Jaya Bakrie di pertandingan final.
+            Satria Muda Pertamina memiliki kerjasama dengan Pertamina sejak tahun 2016 dan mendapatkan dukungan dari perusahaan tersebut dalam memajukan olahraga basket di Indonesia. Klub ini memiliki komitmen untuk mencetak pemain-pemain basket berkarakter dan berprestasi serta berpartisipasi dalam pembinaan basket sejak usia dini hingga tingkat profesional.</item>
+        <item>Satya Wacana Salatiga adalah klub bola basket profesional yang berasal dari Kota Salatiga, Jawa Tengah, Indonesia. Tim ini bermain dalam Liga Bola Basket Indonesia (IBL) dan bermarkas di Putra Abadi Sport Center, Salatiga. Tim ini awalnya didirikan pada tanggal 1 Agustus 2007 dengan nama Pusdiklat FTI UKSW dan berkompetisi dalam kejuaraan bola basket tingkat mahasiswa mewakili Universitas Kristen Satya Wacana (UKSW).
+            Pada tahun 2010, tim ini melakukan merger dengan klub Angsapura Medan dan mengubah namanya menjadi Satya Wacana Angsapura Salatiga. Seiring berjalannya waktu, tim ini memutuskan untuk mengakhiri kebersamaannya dengan Angsapura dan berdiri sendiri dengan nama Satya Wacana Salatiga. Pada tahun 2021, tim ini mengubah namanya menjadi Satya Wacana Saints Salatiga.</item>
+        <item>CLS Knights Indonesia adalah klub bola basket profesional yang berbasis di Surabaya, Jawa Timur, Indonesia. Mereka berkompetisi dalam ASEAN Basketball League (ABL). Sebelumnya, klub ini berpartisipasi dalam Liga Bola Basket Indonesia (IBL). CLS Knights Indonesia bermarkas di GOR Kertajaya Surabaya.
+            Pada musim ABL 2018-2019, CLS Knights berhasil menjadi juara setelah mengalahkan Singapore Slingers dalam 5 pertandingan. Maxie Esho menjadi pemain terbaik (MVP) final setelah mencetak 25 poin dalam pertandingan pamungkas.</item>
+
+    </string-array>
+    <integer-array name="data_photo">
+        <item>@drawable/facialtreatmentanimasi</item>
+        <item>@drawable/eyetreatmentanimasi</item>
+        <item>@drawable/sunprotectionanimasi</item>
+        <item>@drawable/facemaskanimasi</item>
+        <item>@drawable/moisterazeranimasi</item>
+        <item>@drawable/cleanseranimasi</item>
+
+    </integer-array>
 </resources>

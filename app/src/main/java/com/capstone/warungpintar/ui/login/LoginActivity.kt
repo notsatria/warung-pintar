@@ -49,8 +49,14 @@ class LoginActivity : AppCompatActivity() {
                     is ResultState.Success -> {
                         showLoading(false)
 //                        Log.d(TAG, "login success: ${result.data.token}")
-
-                        startActivity(Intent(this@LoginActivity, DashboardProduct::class.java))
+                        val bundle = Bundle().apply {
+                            putString(DashboardProduct.EMAIL_KEY, result.data.email)
+                        }
+                        val intent =
+                            Intent(this@LoginActivity, DashboardProduct::class.java).apply {
+                                putExtras(bundle)
+                            }
+                        startActivity(intent)
                         finish()
                         viewModel.loginResult.removeObservers(this)
                     }

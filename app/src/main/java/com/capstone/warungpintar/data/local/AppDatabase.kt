@@ -5,16 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.capstone.warungpintar.data.local.entities.BarangDao
-import com.capstone.warungpintar.data.local.entities.BarangEntity
-import com.capstone.warungpintar.data.local.entities.BarangKeluarDao
-import com.capstone.warungpintar.data.local.entities.BarangKeluarEntity
-import com.capstone.warungpintar.data.local.entities.BarangMasukDao
-import com.capstone.warungpintar.data.local.entities.BarangMasukEntity
-import com.capstone.warungpintar.data.local.entities.KategoriDao
-import com.capstone.warungpintar.data.local.entities.KategoriEntity
-import com.capstone.warungpintar.data.local.entities.NotifikasiDao
-import com.capstone.warungpintar.data.local.entities.NotifikasiEntity
+import com.capstone.warungpintar.data.local.entities.ProductDao
+import com.capstone.warungpintar.data.local.entities.ProductEntity
+import com.capstone.warungpintar.data.local.entities.ProductOutDao
+import com.capstone.warungpintar.data.local.entities.ProductOutEntity
+import com.capstone.warungpintar.data.local.entities.ProductInDao
+import com.capstone.warungpintar.data.local.entities.ProductInEntity
+import com.capstone.warungpintar.data.local.entities.CategoryDao
+import com.capstone.warungpintar.data.local.entities.CategoryEntity
+import com.capstone.warungpintar.data.local.entities.NotificationDao
+import com.capstone.warungpintar.data.local.entities.NotificationEntity
 import com.capstone.warungpintar.data.local.entities.UserDao
 import com.capstone.warungpintar.data.local.entities.UserEntity
 import kotlinx.coroutines.CoroutineScope
@@ -24,11 +24,11 @@ import kotlinx.coroutines.launch
 @Database(
     entities = [
         UserEntity::class,
-        KategoriEntity::class,
-        BarangEntity::class,
-        BarangMasukEntity::class,
-        BarangKeluarEntity::class,
-        NotifikasiEntity::class
+        CategoryEntity::class,
+        ProductEntity::class,
+        ProductInEntity::class,
+        ProductOutEntity::class,
+        NotificationEntity::class
     ],
     version = 1,
     exportSchema = false
@@ -36,11 +36,11 @@ import kotlinx.coroutines.launch
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
-    abstract fun kategoriDao(): KategoriDao
-    abstract fun barangDao(): BarangDao
-    abstract fun barangMasukDao(): BarangMasukDao
-    abstract fun barangKeluarDao(): BarangKeluarDao
-    abstract fun notifikasiDao(): NotifikasiDao
+    abstract fun kategoriDao(): CategoryDao
+    abstract fun barangDao(): ProductDao
+    abstract fun barangMasukDao(): ProductInDao
+    abstract fun barangKeluarDao(): ProductOutDao
+    abstract fun notifikasiDao(): NotificationDao
 
     companion object {
         @Volatile
@@ -66,26 +66,12 @@ abstract class AppDatabase : RoomDatabase() {
                 CoroutineScope(Dispatchers.IO).launch {
                     INSTANCE?.kategoriDao()?.insertAll(
                         listOf(
-                            KategoriEntity(namaKategori = "Makanan"),
-                            KategoriEntity(namaKategori = "Minuman"),
-                            KategoriEntity(namaKategori = "Alat Tulis"),
-                            KategoriEntity(namaKategori = "Kebutuhan Rumah"),
-                            KategoriEntity(namaKategori = "Kebersihan"),
-                            KategoriEntity(namaKategori = "Perawatan Diri"),
-                            KategoriEntity(namaKategori = "Elektronik"),
-                            KategoriEntity(namaKategori = "Snack"),
-                            KategoriEntity(namaKategori = "Bumbu Dapur"),
-                            KategoriEntity(namaKategori = "Sembako"),
-                            KategoriEntity(namaKategori = "Frozen Food"),
-                            KategoriEntity(namaKategori = "Rokok"),
-                            KategoriEntity(namaKategori = "Susu & Olahan"),
-                            KategoriEntity(namaKategori = "Mie Instan"),
-                            KategoriEntity(namaKategori = "Minyak Goreng"),
-                            KategoriEntity(namaKategori = "Gas Elpiji"),
-                            KategoriEntity(namaKategori = "Air Mineral"),
-                            KategoriEntity(namaKategori = "Obat-obatan"),
-                            KategoriEntity(namaKategori = "Peralatan Mandi"),
-                            KategoriEntity(namaKategori = "Peralatan Masak")
+                            CategoryEntity(namaKategori = "Facial Treatments"),
+                            CategoryEntity(namaKategori = "Eye Treatments"),
+                            CategoryEntity(namaKategori = "Sun Protection"),
+                            CategoryEntity(namaKategori = "Face Mask"),
+                            CategoryEntity(namaKategori = "Moisturizer"),
+                            CategoryEntity(namaKategori = "Cleanser"),
                         )
                     )
                 }

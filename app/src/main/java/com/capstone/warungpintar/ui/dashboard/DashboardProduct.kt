@@ -16,6 +16,7 @@ import com.capstone.warungpintar.ui.category.CategoryProductActivity
 import com.capstone.warungpintar.ui.deleteproduct.DeleteProductOutActivity
 import com.capstone.warungpintar.ui.history.ProductHistoryActivity
 import com.capstone.warungpintar.ui.liststockproduct.ListStockProductActivity
+import com.capstone.warungpintar.ui.newsproduct.ListNewsActivity
 import com.capstone.warungpintar.ui.notification.NotificationActivity
 import com.capstone.warungpintar.ui.report.ReportActivity
 import com.capstone.warungpintar.ui.welcoming.WelcomeActivity
@@ -26,7 +27,6 @@ import com.google.firebase.auth.auth
 
 class DashboardProduct : AppCompatActivity() {
     private lateinit var binding: ActivityDashboardProductBinding
-    private lateinit var auth: FirebaseAuth
 
     private val viewModel: DashboardViewModel by viewModels {
         DashboardViewModelFactory.getInstance()
@@ -40,8 +40,8 @@ class DashboardProduct : AppCompatActivity() {
         setContentView(binding.root)
         setTopBarAction()
         setupAction()
-        auth = Firebase.auth
-        email = auth.currentUser?.email ?: ""
+
+        email = intent?.getStringExtra(EMAIL_KEY) ?: ""
 
         if (email.isNotEmpty()) {
             viewModel.getDashboardUser(email)
@@ -116,7 +116,6 @@ class DashboardProduct : AppCompatActivity() {
     }
 
     private fun signOut() {
-        auth.signOut()
         startActivity(Intent(this@DashboardProduct, WelcomeActivity::class.java))
         finish()
     }
@@ -164,9 +163,16 @@ class DashboardProduct : AppCompatActivity() {
             val intent = Intent(this, ReportActivity::class.java)
             startActivity(intent)
         }
+
+        binding.btnBerita.setOnClickListener {
+            val intent = Intent(this, ListNewsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     companion object {
         private const val TAG = "DashboardProduct"
+
+        const val EMAIL_KEY = "email_key"
     }
 }
