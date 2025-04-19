@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("com.google.gms.google-services")
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -95,4 +97,13 @@ dependencies {
     //CameraX
     implementation("androidx.camera:camera-core:1.0.0")
     implementation("androidx.camera:camera-camera2:1.0.0")
+
+    // Room
+    val roomVersion = "2.7.0"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    ksp("com.google.dagger:hilt-android-compiler:2.51.1")
 }
