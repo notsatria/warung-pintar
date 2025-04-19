@@ -6,6 +6,8 @@ import androidx.room.ForeignKey
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
+import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Entity(
     tableName = "product",
@@ -35,4 +37,7 @@ interface ProductDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(obj: ProductEntity): Long
+
+    @Query("SELECT * FROM product")
+    fun getAllProduct(): Flow<List<ProductEntity>>
 }

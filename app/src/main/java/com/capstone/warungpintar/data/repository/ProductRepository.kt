@@ -16,7 +16,16 @@ class ProductRepository @Inject constructor(
     private val categoryDao: CategoryDao
 ) {
 
-    suspend fun insertProduct(product: ProductEntity) = productDao.insert(product)
+    suspend fun insertProduct(product: ProductEntity) {
+        productDao.insert(product)
+        productInDao.insert(
+            ProductInEntity(
+                barangId = product.id,
+                tanggalMasuk = product.tanggalMasuk,
+                jumlah = product.jumlah
+            )
+        )
+    }
 
     suspend fun insertProductIn(productIn: ProductInEntity) =
         productInDao.insert(productIn)
@@ -24,4 +33,6 @@ class ProductRepository @Inject constructor(
     suspend fun insertProductOut(productOut: ProductOutEntity) = productOutDao.insert(productOut)
 
     fun getCategories() = categoryDao.getAllKategori()
+
+    fun getProducts() = productDao.getAllProduct()
 }

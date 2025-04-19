@@ -19,5 +19,5 @@ data class ProductOutEntity(
 interface ProductOutDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(obj: ProductOutEntity)
+    suspend fun insert(productOut: ProductOutEntity): Long
 }

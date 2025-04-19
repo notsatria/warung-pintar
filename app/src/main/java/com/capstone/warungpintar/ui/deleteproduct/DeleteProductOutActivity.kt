@@ -11,30 +11,27 @@ import com.capstone.warungpintar.data.ResultState
 import com.capstone.warungpintar.data.remote.model.request.DeleteProductRequest
 import com.capstone.warungpintar.databinding.ActivityDeleteProductOutBinding
 import com.capstone.warungpintar.utils.Validation
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
+@AndroidEntryPoint
 class DeleteProductOutActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDeleteProductOutBinding
-    private lateinit var auth: FirebaseAuth
-    private var email = ""
 
-    private val viewModel: DeleteProductViewModel by viewModels {
-        DeleteProductViewModelFactory.getInstance()
-    }
+    private val viewModel: DeleteProductViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDeleteProductOutBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        auth = Firebase.auth
-        email = auth.currentUser?.email ?: ""
-        setupActions()
+        binding.setupActions()
 
-        viewModel.resultDelete.observe(this) { result ->
+        viewModel.productOutState.observe(this) { result ->
             if (result != null) {
                 when (result) {
                     is ResultState.Loading -> {
@@ -58,22 +55,22 @@ class DeleteProductOutActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupActions() {
-        binding.btnAddproductClose.setOnClickListener { _ ->
+    private fun ActivityDeleteProductOutBinding.setupActions() {
+        btnAddproductClose.setOnClickListener { _ ->
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.tglkeluarEditText.setOnClickListener {
+        tglkeluarEditText.setOnClickListener {
             val year = Calendar.getInstance().get(Calendar.YEAR)
             val month = Calendar.getInstance().get(Calendar.MONTH)
             val dayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
             val datePickerDialog = DatePickerDialog(
-                this,
+                this@DeleteProductOutActivity,
                 { view, year, month, dayOfMonth ->
                     val selectedDate = "$dayOfMonth/${month + 1}/$year"
 
-                    binding.tglkeluarEditText.setText(selectedDate)
+                    tglkeluarEditText.setText(selectedDate)
                 },
                 year,
                 month,
@@ -85,26 +82,44 @@ class DeleteProductOutActivity : AppCompatActivity() {
             datePickerDialog.show()
         }
 
-        binding.btnDeleteProduct.setOnClickListener { _ ->
-            if (validate() && email.isNotEmpty()) {
+        btnDeleteProduct.setOnClickListener { _ ->
+            if (validate()) {
                 deleteProduct()
-            } else if (validate() && email.isEmpty()) {
-                showMessage("Something wrong, maybe the session is ended")
             } else {
                 showMessage("Data tidak boleh ada yang kosong")
             }
         }
+
+        namabaranglEditText.setOnClickListener {
+            showProductListDialog()
+        }
+    }
+
+    private fun showProductListDialog() {
+        val productItems = viewModel.productList.map { it.nama }.toTypedArray()
+        val dialog = MaterialAlertDialogBuilder(this).apply {
+            setTitle("Daftar Barang")
+            setItems(productItems) { _, index ->
+                val selectedItem = productItems[index]
+                binding.namabaranglEditText.setText(selectedItem)
+                viewModel.selectedProduct = viewModel.productList[index]
+            }
+        }
+
+        dialog.show()
     }
 
     private fun deleteProduct() {
         with(binding) {
-            val productName = namabaranglEditText.text.toString().trim()
             val exitDate = tglkeluarEditText.text.toString().trim()
             val quantity = jmlmasuklEditText.text.toString().trim().toInt()
             val sellingPrice = hargajualEditText.text.toString().trim().toInt()
 
-            val data = DeleteProductRequest(productName, exitDate, quantity, sellingPrice)
-            viewModel.deleteProduct(email, productName, data)
+            viewModel.insertProductOut(
+                hargaJual = sellingPrice,
+                jumlah = quantity,
+                tglKeluar = exitDate
+            )
         }
     }
 
