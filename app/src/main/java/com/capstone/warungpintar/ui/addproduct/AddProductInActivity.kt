@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import com.capstone.warungpintar.R
 import com.capstone.warungpintar.data.ResultState
 import com.capstone.warungpintar.data.remote.model.request.ProductRequest
@@ -26,6 +28,7 @@ import com.capstone.warungpintar.utils.ImageUtils
 import com.capstone.warungpintar.utils.Validation
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 @AndroidEntryPoint
@@ -105,6 +108,16 @@ class AddProductInActivity : AppCompatActivity() {
     }
 
     private fun ActivityAddProductInBinding.setupAction() {
+        lifecycleScope.launch {
+            viewModel.getAllProducts().collect {
+                val adapter = ArrayAdapter(
+                    this@AddProductInActivity,
+                    android.R.layout.simple_list_item_1,
+                    it.map { it.nama })
+                namabaranglEditText.setAdapter(adapter)
+            }
+        }
+
         btnAddproductClose.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -146,14 +159,14 @@ class AddProductInActivity : AppCompatActivity() {
         val hargaJual = binding.hargajualEditText.text.toString().trim()
         val kategori = binding.kategoribrgliEditText.text.toString().trim()
 
-        if (isImageNull &&
-            namaBarang.isEmpty() &&
-            tglMasuk.isEmpty() &&
-            jmlMasuk.isEmpty() &&
-            stokRendah.isEmpty() &&
-            expiredDate.isEmpty() &&
-            hargaBeli.isEmpty() &&
-            hargaJual.isEmpty() &&
+        if (isImageNull ||
+            namaBarang.isEmpty() ||
+            tglMasuk.isEmpty() ||
+            jmlMasuk.isEmpty() ||
+            stokRendah.isEmpty() ||
+            expiredDate.isEmpty() ||
+            hargaBeli.isEmpty() ||
+            hargaJual.isEmpty() ||
             kategori.isEmpty()
         ) {
             showMessage("Masukan data dengan lengkap!")

@@ -1,24 +1,46 @@
 package com.capstone.warungpintar.ui.dashboard
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.capstone.warungpintar.data.ResultState
-import com.capstone.warungpintar.data.remote.model.response.DashboardResponse
-import com.capstone.warungpintar.data.repository.DashboardRepository
+import com.capstone.warungpintar.data.repository.ProductRepository
+import com.capstone.warungpintar.preferences.UserPreferences
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DashboardViewModel(private val dashboardRepository: DashboardRepository) : ViewModel() {
+@HiltViewModel
+class DashboardViewModel
+@Inject constructor(
+    private val userPreferences: UserPreferences,
+    private val productRepository: ProductRepository
+) : ViewModel() {
 
-    private var _resultRequest: MutableLiveData<ResultState<DashboardResponse>> = MutableLiveData()
-    val resultRequest: LiveData<ResultState<DashboardResponse>> get() = _resultRequest
+    var userEmail: String = ""
 
-    fun getDashboardUser(email: String) {
+    init {
+        getUserEmail()
+    }
+
+    private fun getUserEmail() {
         viewModelScope.launch {
-            dashboardRepository.getDashboardUser(email).collect { result ->
-                _resultRequest.value = result
+            userPreferences.getUserEmail().collect { result ->
+                userEmail = result
             }
         }
     }
+
+    fun logout() {
+        viewModelScope.launch {
+            userPreferences.setUserLoggedIn(false)
+            userPreferences.setUserEmail("")
+        }
+    }
+
+    val productLength = productRepository.getProductLength()
+
+    val productInLength = productRepository.getProductInLength()
+
+    val productOutLength = productRepository.getProductOutLength()
+
+    val productsWithLowStockLength = productRepository.getProductsWithLowStockLength()
 }

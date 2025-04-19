@@ -17,10 +17,10 @@ class ProductRepository @Inject constructor(
 ) {
 
     suspend fun insertProduct(product: ProductEntity) {
-        productDao.insert(product)
+        val productId = productDao.insert(product)
         productInDao.insert(
             ProductInEntity(
-                barangId = product.id,
+                barangId = productId.toInt(),
                 tanggalMasuk = product.tanggalMasuk,
                 jumlah = product.jumlah
             )
@@ -34,5 +34,16 @@ class ProductRepository @Inject constructor(
 
     fun getCategories() = categoryDao.getAllKategori()
 
+    fun getAllProductWithCategory() = productDao.getAllProductWithCategory()
+
     fun getProducts() = productDao.getAllProduct()
+
+    fun getProductLength() = productDao.getProductLength()
+
+    fun getProductInLength() = productInDao.getProductInLength()
+
+    fun getProductOutLength() = productOutDao.getProductOutLength()
+
+    fun getProductsWithLowStockLength() = productDao.getProductsWithLowStockLength()
+
 }

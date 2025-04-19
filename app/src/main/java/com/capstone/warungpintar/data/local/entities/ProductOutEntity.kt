@@ -5,6 +5,8 @@ import androidx.room.Entity
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
+import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Entity(tableName = "product_out")
 data class ProductOutEntity(
@@ -20,4 +22,7 @@ interface ProductOutDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(productOut: ProductOutEntity): Long
+
+    @Query("SELECT COUNT(*) FROM product_out")
+    fun getProductOutLength(): Flow<Int>
 }

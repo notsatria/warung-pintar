@@ -7,8 +7,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.capstone.warungpintar.R
-import com.capstone.warungpintar.data.ResultState
 import com.capstone.warungpintar.data.remote.model.response.DashboardResponse
 import com.capstone.warungpintar.databinding.ActivityDashboardProductBinding
 import com.capstone.warungpintar.ui.addproduct.AddProductInActivity
@@ -21,58 +21,51 @@ import com.capstone.warungpintar.ui.notification.NotificationActivity
 import com.capstone.warungpintar.ui.report.ReportActivity
 import com.capstone.warungpintar.ui.welcoming.WelcomeActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class DashboardProduct : AppCompatActivity() {
     private lateinit var binding: ActivityDashboardProductBinding
 
-    private val viewModel: DashboardViewModel by viewModels {
-        DashboardViewModelFactory.getInstance()
-    }
-
-    private var email = ""
+    private val viewModel: DashboardViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setTopBarAction()
-        setupAction()
-
-        email = intent?.getStringExtra(EMAIL_KEY) ?: ""
-
-        if (email.isNotEmpty()) {
-            viewModel.getDashboardUser(email)
-            binding.topAppBar.subtitle = email
+        binding.setupAction()
+        if (viewModel.userEmail.isNotEmpty()) {
+            binding.topAppBar.subtitle = viewModel.userEmail
         } else {
             Toast.makeText(this, "Something failed", Toast.LENGTH_SHORT).show()
             Log.d(TAG, "onCreate: email is null or empty, cannot get dashboard data")
             signOut()
         }
 
-        viewModel.resultRequest.observe(this) { result ->
-            if (result != null) {
-                when (result) {
-                    is ResultState.Loading -> {
-                        showLoading(true)
-                    }
+        /* viewModel.resultRequest.observe(this) { result ->
+             if (result != null) {
+                 when (result) {
+                     is ResultState.Loading -> {
+                         showLoading(true)
+                     }
 
-                    is ResultState.Success -> {
-                        val data = result.data
-                        setDataView(data)
-                        showLoading(false)
-                    }
+                     is ResultState.Success -> {
+                         val data = result.data
+                         setDataView(data)
+                         showLoading(false)
+                     }
 
-                    is ResultState.Error -> {
-                        showLoading(false)
-                        Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
-                        Log.d(TAG, "onCreate: error fetch data from API: ${result.error}")
-                    }
-                }
-            }
-        }
+                     is ResultState.Error -> {
+                         showLoading(false)
+                         Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                         Log.d(TAG, "onCreate: error fetch data from API: ${result.error}")
+                     }
+                 }
+             }
+         }*/
     }
 
     private fun setDataView(data: DashboardResponse) {
@@ -116,6 +109,7 @@ class DashboardProduct : AppCompatActivity() {
     }
 
     private fun signOut() {
+        viewModel.logout()
         startActivity(Intent(this@DashboardProduct, WelcomeActivity::class.java))
         finish()
     }
@@ -133,46 +127,70 @@ class DashboardProduct : AppCompatActivity() {
         alertDialog.create().show()
     }
 
-    private fun setupAction() {
-        binding.btnBarangmasuk.setOnClickListener {
-            val intent = Intent(this, AddProductInActivity::class.java)
+    private fun ActivityDashboardProductBinding.setupAction() {
+        lifecycleScope.launch {
+            launch {
+                viewModel.productLength.collectLatest {
+                    tvProduk.text = it.toString()
+                }
+            }
+
+            launch {
+                viewModel.productInLength.collectLatest {
+                    tvBarangmasuk.text = it.toString()
+                }
+            }
+
+            launch {
+                viewModel.productOutLength.collectLatest {
+                    tvBarangkeluar.text = it.toString()
+                }
+            }
+
+            launch {
+                viewModel.productsWithLowStockLength.collectLatest {
+                    tvLowstock.text = it.toString()
+                }
+            }
+        }
+
+        btnBarangmasuk.setOnClickListener {
+            val intent = Intent(this@DashboardProduct, AddProductInActivity::class.java)
             startActivity(intent)
         }
 
-        binding.btnBarangkeluar.setOnClickListener {
-            val intent = Intent(this, DeleteProductOutActivity::class.java)
+        btnBarangkeluar.setOnClickListener {
+            val intent = Intent(this@DashboardProduct, DeleteProductOutActivity::class.java)
             startActivity(intent)
         }
 
-        binding.btnStock.setOnClickListener {
-            val intent = Intent(this, ListStockProductActivity::class.java)
+        btnStock.setOnClickListener {
+            val intent = Intent(this@DashboardProduct, ListStockProductActivity::class.java)
             startActivity(intent)
         }
 
-        binding.btnKategori.setOnClickListener {
-            val intent = Intent(this, CategoryProductActivity::class.java)
+        btnKategori.setOnClickListener {
+            val intent = Intent(this@DashboardProduct, CategoryProductActivity::class.java)
             startActivity(intent)
         }
 
-        binding.btnHistory.setOnClickListener {
-            val intent = Intent(this, ProductHistoryActivity::class.java)
+        btnHistory.setOnClickListener {
+            val intent = Intent(this@DashboardProduct, ProductHistoryActivity::class.java)
             startActivity(intent)
         }
 
-        binding.btnLaporan.setOnClickListener {
-            val intent = Intent(this, ReportActivity::class.java)
+        btnLaporan.setOnClickListener {
+            val intent = Intent(this@DashboardProduct, ReportActivity::class.java)
             startActivity(intent)
         }
 
-        binding.btnBerita.setOnClickListener {
-            val intent = Intent(this, ListNewsActivity::class.java)
+        btnBerita.setOnClickListener {
+            val intent = Intent(this@DashboardProduct, ListNewsActivity::class.java)
             startActivity(intent)
         }
     }
 
     companion object {
         private const val TAG = "DashboardProduct"
-
-        const val EMAIL_KEY = "email_key"
     }
 }

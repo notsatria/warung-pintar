@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.addproduct.AddProductInActivity"
-    android:scrollbars="none">
+    android:scrollbars="none"
+    tools:context=".ui.addproduct.AddProductInActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -63,13 +63,12 @@
                 android:layout_height="48dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="20dp"
-                android:clickable="true"
                 android:background="@drawable/baseline_drive_folder_upload_24"
+                android:clickable="true"
+                android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@id/product_image"
                 app:layout_constraintEnd_toEndOf="@id/product_image"
-                app:tint="@color/black"
-                android:focusable="true" />
-
+                app:tint="@color/black" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -82,26 +81,27 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="@id/namabarangEditTextLayout"
             app:layout_constraintBottom_toBottomOf="@id/namabarangEditTextLayout"
+            app:layout_constraintTop_toTopOf="@id/namabarangEditTextLayout"
             tools:ignore="MissingConstraints" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/namabarangEditTextLayout"
             android:layout_width="256dp"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_marginTop="14dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/product_image">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/namabaranglEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:completionThreshold="1"
                 android:ems="10"
                 android:hint="Nama Barang"
                 android:inputType="text"
-                tools:ignore="SpeakableTextPresentCheck" />
+                android:paddingHorizontal="16dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,9 +113,9 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tglmasukEditTextLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tglmasukEditTextLayout"
-            app:layout_constraintBottom_toBottomOf="@id/tglmasukEditTextLayout"
             tools:ignore="MissingConstraints" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -130,9 +130,9 @@
                 android:id="@+id/tglmasuklEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_access_time_24"
                 android:ems="20"
                 android:hint="DD/MM/YY"
-                android:drawableEnd="@drawable/ic_access_time_24"
                 tools:ignore="SpeakableTextPresentCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -145,8 +145,8 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="@id/jmlmasukEditTextLayout"
             app:layout_constraintBottom_toBottomOf="@id/jmlmasukEditTextLayout"
+            app:layout_constraintTop_toTopOf="@id/jmlmasukEditTextLayout"
             tools:ignore="MissingConstraints" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -176,9 +176,9 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="@id/lowstockEditTextLayout"
             app:layout_constraintBottom_toBottomOf="@id/lowstockEditTextLayout"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/lowstockEditTextLayout" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/lowstockEditTextLayout"
@@ -207,16 +207,16 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/kodestockEditTextLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/kodestockEditTextLayout"
-            app:layout_constraintBottom_toBottomOf="@id/kodestockEditTextLayout" />
+            app:layout_constraintTop_toTopOf="@id/kodestockEditTextLayout" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/kodestockEditTextLayout"
             android:layout_width="256dp"
-            android:background="@drawable/bg_grayoutlined"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
+            android:background="@drawable/bg_grayoutlined"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lowstockEditTextLayout">
 
@@ -224,10 +224,10 @@
                 android:id="@+id/tv_resultscan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:text=""
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:layout_marginStart="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -235,8 +235,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_qrcode"
                 android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_qrcode"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -251,9 +251,9 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/hargabeliEditTextLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/hargabeliEditTextLayout"
-            app:layout_constraintBottom_toBottomOf="@id/hargabeliEditTextLayout" />
+            app:layout_constraintTop_toTopOf="@id/hargabeliEditTextLayout" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/hargabeliEditTextLayout"
@@ -282,9 +282,9 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/hargajualEditTextLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/hargajualEditTextLayout"
-            app:layout_constraintBottom_toBottomOf="@id/hargajualEditTextLayout" />
+            app:layout_constraintTop_toTopOf="@id/hargajualEditTextLayout" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/hargajualEditTextLayout"
@@ -313,9 +313,9 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/kategoribrgEditTextLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/kategoribrgEditTextLayout"
-            app:layout_constraintBottom_toBottomOf="@id/kategoribrgEditTextLayout" />
+            app:layout_constraintTop_toTopOf="@id/kategoribrgEditTextLayout" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/kategoribrgEditTextLayout"
@@ -339,16 +339,16 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_upload"
+            style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="130dp"
             android:layout_height="48dp"
             android:layout_marginTop="24dp"
-            style="@style/Widget.Material3.Button.ElevatedButton"
-            app:backgroundTint="@color/light_blue"
-            android:textColor="@color/white"
             android:text="Simpan"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/light_blue"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/kategoribrgEditTextLayout"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/kategoribrgEditTextLayout" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

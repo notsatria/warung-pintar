@@ -46,7 +46,7 @@ class AddProductViewModel @Inject constructor(private val productRepository: Pro
         expiredDate: String,
         hargaBeli: Int,
         hargaJual: Int,
-        imagePath: String?
+        imagePath: String
     ) {
         val product = ProductEntity(
             nama = namaBarang,
@@ -61,17 +61,17 @@ class AddProductViewModel @Inject constructor(private val productRepository: Pro
         )
 
         viewModelScope.launch {
-            resultUpload.value = ResultState.Loading
-
-            val res = productRepository.insertProduct(product)
-
-            if (res > 0) {
+            try {
+                resultUpload.value = ResultState.Loading
+                productRepository.insertProduct(product)
                 resultUpload.value = ResultState.Success("Berhasil menambahkan barang")
-            } else {
-                resultUpload.value = ResultState.Error("Gagal menambahkan barang")
+            } catch (e: Exception) {
+                resultUpload.value = ResultState.Error(e.message.toString())
             }
         }
     }
+
+    fun getAllProducts() =  productRepository.getProducts()
 
     fun performOCR(imageFile: File) {
         viewModelScope.launch {

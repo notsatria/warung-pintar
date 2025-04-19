@@ -6,24 +6,25 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstone.warungpintar.data.ResultState
 import com.capstone.warungpintar.databinding.ActivityListStockProductBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ListStockProductActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityListStockProductBinding
     private lateinit var adapter: ListStockAdapter
 
-    private val viewModel: ListStockViewModel by viewModels {
-        ListStockViewModelFactory.getInstance()
-    }
+    private val viewModel: ListStockViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityListStockProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupView()
+        binding.setupView()
         viewModel.getListProduct()
 
         viewModel.resultList.observe(this) { result ->
@@ -35,7 +36,7 @@ class ListStockProductActivity : AppCompatActivity() {
 
                     is ResultState.Success -> {
                         val data = result.data
-                        adapter.submitList(data)
+                        adapter.setData(data)
                         showLoading(false)
                     }
 
@@ -65,11 +66,22 @@ class ListStockProductActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupView() {
+    private fun ActivityListStockProductBinding.setupView() {
         adapter = ListStockAdapter()
-        val recyclerView = binding.rvListStockProduct
+        val recyclerView = rvListStockProduct
         recyclerView.layoutManager = LinearLayoutManager(this@ListStockProductActivity)
         recyclerView.adapter = adapter
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                adapter.filter.filter(query)
+                return true
+            }
+        })
     }
 
     companion object {

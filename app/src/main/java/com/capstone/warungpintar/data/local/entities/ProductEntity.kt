@@ -7,6 +7,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
+import androidx.room.Transaction
+import com.capstone.warungpintar.data.model.Product
 import kotlinx.coroutines.flow.Flow
 
 @Entity(
@@ -26,10 +28,26 @@ data class ProductEntity(
     val expired: String,
     val hargaBeli: Int,
     val hargaJual: Int,
-    val imagePath: String?,
+    val imagePath: String,
     val kategoriId: Int,
-    val tanggalMasuk: String
-)
+    val tanggalMasuk: String,
+) {
+    fun toProduct(): Product {
+        return Product(
+            productId = id,
+            productName = nama,
+            entryDate = tanggalMasuk,
+            productCategory = "",
+            productQuantity = jumlah,
+            lowStock = lowStock,
+            codeStock = "",
+            purchasePrice = hargaBeli,
+            sellingPrice = hargaJual,
+            imageUrl = imagePath,
+            expiredDate = expired
+        )
+    }
+}
 
 
 @Dao
@@ -40,4 +58,18 @@ interface ProductDao {
 
     @Query("SELECT * FROM product")
     fun getAllProduct(): Flow<List<ProductEntity>>
+
+    @Transaction
+    @Query("SELECT * FROM product")
+    fun getAllProductWithCategory(): Flow<List<ProductWithCategory>>
+
+    @Transaction
+    @Query("SELECT * FROM product WHERE id = :id")
+    fun getProductWithCategoryById(id: Int): ProductWithCategory
+
+    @Query("SELECT COUNT(id) FROM product")
+    fun getProductLength(): Flow<Int>
+
+    @Query("SELECT * FROM product WHERE jumlah <= lowStock")
+    fun getProductsWithLowStockLength(): Flow<Int>
 }

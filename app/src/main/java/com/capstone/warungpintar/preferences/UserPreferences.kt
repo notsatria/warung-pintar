@@ -3,6 +3,7 @@ package com.capstone.warungpintar.preferences
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -17,43 +18,34 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore("user_pref
 class UserPreferences(private val dataStore: DataStore<Preferences>) {
 
     companion object {
-        private const val KEY_EMAIL = "email"
-        private const val KEY_TOKEN = "token"
-
-        private val KEY_PREFERENCES_EMAIL = stringPreferencesKey(KEY_EMAIL)
-        private val KEY_PREFERENCES_TOKEN = stringPreferencesKey(KEY_TOKEN)
-
-        @Volatile
-        private var INSTANCE: UserPreferences? = null
-
-        fun getInstance(context: Context): UserPreferences {
-            return INSTANCE ?: synchronized(this) {
-                val dataStore = context.dataStore
-                val instance = UserPreferences(dataStore)
-                INSTANCE = instance
-                instance
-            }
-        }
+        private val USER_LOGGED_IN_KEY = booleanPreferencesKey("user_logged_in")
+        private val USER_EMAIL_KEY = stringPreferencesKey("user_email")
     }
 
-    fun saveToken(token: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            dataStore.edit { preferences ->
-                preferences[KEY_PREFERENCES_TOKEN] = token
-            }
-        }
-    }
-
-    fun getToken(): Flow<String?> {
+    fun getUserEmail(): Flow<String> {
         return dataStore.data.map { preferences ->
-            preferences[KEY_PREFERENCES_TOKEN]
+            preferences[USER_EMAIL_KEY] ?: ""
         }
     }
 
-    fun deleteToken() {
+    fun setUserEmail(email: String) {
         CoroutineScope(Dispatchers.IO).launch {
             dataStore.edit { preferences ->
-                preferences.remove(KEY_PREFERENCES_TOKEN)
+                preferences[USER_EMAIL_KEY] = email
+            }
+        }
+    }
+
+    fun isUserLoggedIn(): Flow<Boolean> {
+        return dataStore.data.map { preferences ->
+            preferences[USER_LOGGED_IN_KEY] == true
+        }
+    }
+
+    fun setUserLoggedIn(isLoggedIn: Boolean) {
+        CoroutineScope(Dispatchers.IO).launch {
+            dataStore.edit { preferences ->
+                preferences[USER_LOGGED_IN_KEY] = isLoggedIn
             }
         }
     }
