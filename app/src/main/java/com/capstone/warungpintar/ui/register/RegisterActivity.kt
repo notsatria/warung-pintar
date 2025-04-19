@@ -18,7 +18,9 @@ import com.capstone.warungpintar.ui.login.LoginActivity
 import com.capstone.warungpintar.utils.Validation
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
@@ -35,9 +37,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var confirmPasswordLayout: TextInputLayout
 
 
-    private val viewModel: RegisterViewModel by viewModels {
-        RegisterViewModelFactory.getInstance()
-    }
+    private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,42 +46,6 @@ class RegisterActivity : AppCompatActivity() {
         setupViews()
         setupAction()
         val intentDashboard = Intent(this@RegisterActivity, DashboardProduct::class.java)
-
-        viewModel.registerFirebaseResult.observe(this) { result ->
-            if (result != null) {
-                when (result) {
-                    is ResultState.Loading -> {
-                        showLoading(true)
-                    }
-
-                    is ResultState.Success -> {
-                        showLoading(false)
-                        showMessage(result.data)
-                        val email = result.data
-                        if (email.isNotEmpty()) {
-                            intentDashboard.putExtra("email", email)
-
-                            val storeName = storeNameEditText.text.toString().trim()
-                            val phoneNumber = phoneNumberEditText.text.toString().trim()
-                            val inputEmail = emailEditText.text.toString().trim()
-                            val password = passwordEditText.text.toString().trim()
-
-                            val registerRequest = RegisterRequest(
-                                inputEmail, password, storeName, phoneNumber
-                            )
-                            viewModel.register(registerRequest)
-                        } else {
-                            showMessage("Terjadi kesalahan, silahkan coba lagi nanti")
-                        }
-                    }
-
-                    is ResultState.Error -> {
-                        showLoading(false)
-                        showMessage(result.error)
-                    }
-                }
-            }
-        }
 
         viewModel.registerResult.observe(this) { result ->
             if (result != null) {
@@ -155,10 +119,12 @@ class RegisterActivity : AppCompatActivity() {
         binding.btnSignup.setOnClickListener { _ ->
             if (validate()) {
                 val email = emailEditText.text.toString().trim()
+                val namaWarung = storeNameEditText.text.toString().trim()
+                val nomorTelp = phoneNumberEditText.text.toString().trim()
                 val password = passwordEditText.text.toString().trim()
 
                 // This feature is already running (register to Firebase)
-                viewModel.registerToFirebase(email, password)
+                viewModel.register(namaWarung, nomorTelp, email, password)
 
                 // Move directly to the LoginActivity for testing
 //                gotoLogin()

@@ -1,34 +1,37 @@
 package com.capstone.warungpintar.ui.register
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstone.warungpintar.data.ResultState
-import com.capstone.warungpintar.data.remote.model.request.RegisterRequest
+import com.capstone.warungpintar.data.local.entities.UserEntity
 import com.capstone.warungpintar.data.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RegisterViewModel(private val userRepository: UserRepository) : ViewModel() {
+@HiltViewModel
+class RegisterViewModel @Inject constructor(private val userRepository: UserRepository) :
+    ViewModel() {
 
-    private var _registerResult: MutableLiveData<ResultState<String>> = MutableLiveData()
-    val registerResult: LiveData<ResultState<String>> get() = _registerResult
+    val registerResult = MutableLiveData<ResultState<String>>()
 
-    private var _registerFirebaseResult: MutableLiveData<ResultState<String>> = MutableLiveData()
-    val registerFirebaseResult: LiveData<ResultState<String>> get() = _registerFirebaseResult
-
-    fun register(registerRequest: RegisterRequest) {
+    fun register(namaWarung: String, nomorTelp: String, email: String, password: String) {
+        val user = UserEntity(
+            namaWarung = namaWarung,
+            noTelp = nomorTelp,
+            email = email,
+            password = password
+        )
         viewModelScope.launch {
-            userRepository.register(registerRequest).collect {
-                _registerResult.value = it
-            }
-        }
-    }
-
-    fun registerToFirebase(email: String, password: String) {
-        viewModelScope.launch {
-            userRepository.registerToFirebase(email, password).collect {
-                _registerFirebaseResult.value = it
+            try {
+                registerResult.value = ResultState.Loading
+                val res = userRepository.register(user)
+                if (res > 0) {
+                    registerResult.value = ResultState.Success("Registrasi berhasil")
+                }
+            } catch (e: Exception) {
+                registerResult.value = ResultState.Error("Registrasi gagal: ${e.message}")
             }
         }
     }

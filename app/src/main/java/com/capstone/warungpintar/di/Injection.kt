@@ -11,10 +11,6 @@ import com.capstone.warungpintar.data.repository.ProductRepository
 import com.capstone.warungpintar.data.repository.UserRepository
 
 object Injection {
-    fun provideUserRepository(): UserRepository {
-        val apiUserService = ApiConfig.getApiConfig().create(ApiUserService::class.java)
-        return UserRepository.getInstance(apiUserService)
-    }
 
     fun provideProductRepository(): ProductRepository {
         val apiProductService = ApiConfig.getApiConfig().create(ApiProductService::class.java)

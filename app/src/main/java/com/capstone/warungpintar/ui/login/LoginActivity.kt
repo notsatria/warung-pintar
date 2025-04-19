@@ -18,7 +18,9 @@ import com.capstone.warungpintar.ui.register.RegisterActivity
 import com.capstone.warungpintar.utils.Validation
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
@@ -28,9 +30,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var passwordEditText: TextInputEditText
     private lateinit var passwordLayout: TextInputLayout
 
-    private val viewModel: LoginViewModel by viewModels {
-        LoginViewModelFactory.getInstance()
-    }
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
         setupViews()
         setupAction()
 
-        viewModel.loginFirebaseResult.observe(this) { result ->
+        viewModel.loginResult.observe(this) { result ->
             if (result != null) {
                 when (result) {
                     is ResultState.Loading -> {
@@ -97,12 +97,8 @@ class LoginActivity : AppCompatActivity() {
 
             if (isEmailValid && isPasswordValid) {
                 // TODO: Not yet connected to the API, still waiting from the CC team
-//                viewModel.login(
-//                    emailEditText.text.toString().trim(),
-//                    passwordEditText.text.toString().trim()
-//                )
 
-                viewModel.loginWithFirebase(
+                viewModel.login(
                     emailEditText.text.toString().trim(),
                     passwordEditText.text.toString().trim()
                 )

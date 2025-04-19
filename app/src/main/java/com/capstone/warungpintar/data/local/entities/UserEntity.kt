@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
+import androidx.room.Query
 
 @Entity(tableName = "users")
 data class UserEntity(
@@ -19,5 +20,9 @@ data class UserEntity(
 interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(obj: UserEntity)
+    suspend fun insert(obj: UserEntity): Long
+
+    @Query("SELECT * FROM users WHERE email = :email AND password = :password")
+    suspend fun login(email: String, password: String): UserEntity?
+
 }
