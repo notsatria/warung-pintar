@@ -8,7 +8,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.capstone.warungpintar.data.model.Product
+import com.capstone.warungpintar.utils.toStrDate
 import kotlinx.coroutines.flow.Flow
 
 @Entity(
@@ -25,18 +27,18 @@ data class ProductEntity(
     val nama: String,
     val jumlah: Int,
     val lowStock: Int,
-    val expired: String,
+    val expired: Long,
     val hargaBeli: Int,
     val hargaJual: Int,
     val imagePath: String,
     val kategoriId: Int,
-    val tanggalMasuk: String,
+    val tanggalMasuk: Long,
 ) {
     fun toProduct(): Product {
         return Product(
             productId = id,
             productName = nama,
-            entryDate = tanggalMasuk,
+            entryDate = tanggalMasuk.toStrDate(),
             productCategory = "",
             productQuantity = jumlah,
             lowStock = lowStock,
@@ -44,7 +46,7 @@ data class ProductEntity(
             purchasePrice = hargaBeli,
             sellingPrice = hargaJual,
             imageUrl = imagePath,
-            expiredDate = expired
+            expiredDate = expired.toStrDate()
         )
     }
 }
@@ -72,4 +74,28 @@ interface ProductDao {
 
     @Query("SELECT COUNT(*) FROM product WHERE jumlah <= lowStock")
     fun getProductsWithLowStockLength(): Flow<Int>
+
+    @Query("""
+        SELECT p.nama, MAX(po.tanggalKeluar) as tanggalKeluar
+        FROM product p
+        JOIN product_out po ON po.barangId = p.id
+        WHERE p.jumlah <= p.lowStock
+        GROUP BY p.id
+        """)
+    suspend fun getProductsWithLowStock(): List<ProductWithProductOutRaw>
+
+    @Update
+    suspend fun update(product: ProductEntity)
+
+    @Query(
+        """
+            SELECT nama
+            FROM product
+            WHERE expired <= :today
+        """
+    )
+    suspend fun getExpiredProducts(today: Long): List<String>
+
+    @Query("SELECT * FROM product WHERE LOWER(nama) LIKE '%' || LOWER(:name) || '%'")
+    suspend fun getProductByName(name: String): ProductEntity
 }

@@ -1,14 +1,20 @@
 package com.capstone.warungpintar.ui.dashboard
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.capstone.warungpintar.R
+import com.capstone.warungpintar.data.local.entities.NotificationType
 import com.capstone.warungpintar.data.remote.model.response.DashboardResponse
 import com.capstone.warungpintar.databinding.ActivityDashboardProductBinding
 import com.capstone.warungpintar.ui.addproduct.AddProductInActivity
@@ -20,6 +26,7 @@ import com.capstone.warungpintar.ui.newsproduct.ListNewsActivity
 import com.capstone.warungpintar.ui.notification.NotificationActivity
 import com.capstone.warungpintar.ui.report.ReportActivity
 import com.capstone.warungpintar.ui.welcoming.WelcomeActivity
+import com.capstone.warungpintar.worker.InstanceWorker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -37,6 +44,9 @@ class DashboardProduct : AppCompatActivity() {
         setContentView(binding.root)
         setTopBarAction()
         binding.setupAction()
+
+        handlePermissions()
+
         if (viewModel.userEmail.isNotEmpty()) {
             binding.topAppBar.subtitle = viewModel.userEmail
         } else {
@@ -187,6 +197,35 @@ class DashboardProduct : AppCompatActivity() {
         btnBerita.setOnClickListener {
             val intent = Intent(this@DashboardProduct, ListNewsActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    private val notificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                // empty
+            } else {
+                handlePermissions()
+            }
+        }
+
+    private fun handlePermissions() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this, Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                Toast.makeText(
+                    this@DashboardProduct,
+                    "Notification permission granted",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            else -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
         }
     }
 

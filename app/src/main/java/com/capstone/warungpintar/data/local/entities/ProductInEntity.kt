@@ -6,8 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
-import androidx.room.RawQuery
-import androidx.sqlite.db.SupportSQLiteQuery
 import com.capstone.warungpintar.ui.history.HistoryItem
 import kotlinx.coroutines.flow.Flow
 
@@ -15,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 data class ProductInEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val barangId: Int,
-    val tanggalMasuk: String,
+    val tanggalMasuk: Long,
     val jumlah: Int
 )
 

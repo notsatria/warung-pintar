@@ -2,7 +2,7 @@ package com.capstone.warungpintar.data.remote.model.response
 
 import com.google.gson.annotations.SerializedName
 
-data class NotificationResponse(
+data class NotificationEntity(
 
     @field:SerializedName("store_name")
     val storeName: String,

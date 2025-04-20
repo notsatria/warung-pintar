@@ -3,6 +3,7 @@ package com.capstone.warungpintar.data.local.entities
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.capstone.warungpintar.data.model.Product
+import com.capstone.warungpintar.utils.toStrDate
 
 data class ProductWithCategory(
     @Embedded val product: ProductEntity,
@@ -17,7 +18,7 @@ data class ProductWithCategory(
         return Product(
             productId = product.id,
             productName = product.nama,
-            entryDate = product.tanggalMasuk,
+            entryDate = product.tanggalMasuk.toStrDate(),
             productCategory = kategori.namaKategori,
             productQuantity = product.jumlah,
             lowStock = product.lowStock,
@@ -25,7 +26,7 @@ data class ProductWithCategory(
             purchasePrice = product.hargaBeli,
             sellingPrice = product.hargaJual,
             imageUrl = product.imagePath,
-            expiredDate = product.expired
+            expiredDate = product.expired.toStrDate()
         )
     }
 

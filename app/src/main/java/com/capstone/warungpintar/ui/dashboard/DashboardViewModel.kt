@@ -2,6 +2,7 @@ package com.capstone.warungpintar.ui.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.capstone.warungpintar.data.local.entities.UserDao
 import com.capstone.warungpintar.data.repository.ProductRepository
 import com.capstone.warungpintar.preferences.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +13,8 @@ import javax.inject.Inject
 class DashboardViewModel
 @Inject constructor(
     private val userPreferences: UserPreferences,
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val userDao: UserDao
 ) : ViewModel() {
 
     var userEmail: String = ""
@@ -25,6 +27,8 @@ class DashboardViewModel
         viewModelScope.launch {
             userPreferences.getUserEmail().collect { result ->
                 userEmail = result
+                val user = userDao.getUserByEmail(userEmail)
+                userPreferences.setUserWarung(user.namaWarung)
             }
         }
     }
@@ -33,6 +37,7 @@ class DashboardViewModel
         viewModelScope.launch {
             userPreferences.setUserLoggedIn(false)
             userPreferences.setUserEmail("")
+            userPreferences.setUserWarung("")
         }
     }
 

@@ -16,10 +16,6 @@ class DetailProductActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailProductBinding
 
-    private val viewModel: DetailViewModel by viewModels {
-        DetailViewModelFactory.getInstance()
-    }
-
     companion object {
         private const val TAG = "DetailProductActivity"
 
@@ -42,37 +38,7 @@ class DetailProductActivity : AppCompatActivity() {
             intent.getParcelableExtra<Product>(EXTRA_PRODUCT_DETAIL)
         }
 
-        if (product != null) {
-            viewModel.getDetailProductById(product.productId)
-        } else {
-            // Cannot display detail product
-            Log.d(TAG, "onCreate: failed to display detail product because product is null")
-            showMessage("Terjadi kegagalan")
-            finish()
-        }
-
-        viewModel.resultDetail.observe(this) { result ->
-            if (result != null) {
-                when (result) {
-                    is ResultState.Loading -> {
-                        showLoading(true)
-                    }
-
-                    is ResultState.Success -> {
-                        val data = result.data
-                        setDetailView(data)
-                        showLoading(false)
-                    }
-
-                    is ResultState.Error -> {
-                        product?.let { setDetailView(it) }
-                        showLoading(false)
-                        showMessage("Gagal mendapatkan data barang terbaru")
-                    }
-                }
-            }
-        }
-
+        product?.let { setDetailView(it) }
     }
 
     private fun setDetailView(product: Product) {

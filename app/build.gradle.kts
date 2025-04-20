@@ -105,8 +105,14 @@ dependencies {
 
     // Hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+    ksp("com.google.dagger:dagger-compiler:2.51.1")
+    ksp("com.google.dagger:hilt-compiler:2.51.1")
 
     // Timber
     implementation("com.jakewharton.timber:timber:5.0.1")
+
+    // Worker
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("androidx.hilt:hilt-work:1.2.0")
+    ksp("androidx.hilt:hilt-compiler:1.2.0")
 }

@@ -9,11 +9,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.warungpintar.R
-import com.capstone.warungpintar.data.remote.model.response.NotificationResponse
+import com.capstone.warungpintar.data.local.entities.NotificationEntity
+import com.capstone.warungpintar.data.local.entities.NotificationType
 import com.capstone.warungpintar.databinding.ItemNotificationRowBinding
 
 class NotificationAdapter :
-    ListAdapter<NotificationResponse, NotificationAdapter.NotificationViewHolder>(
+    ListAdapter<NotificationEntity, NotificationAdapter.NotificationViewHolder>(
         DIFF_CALLBACK
     ) {
 
@@ -21,17 +22,17 @@ class NotificationAdapter :
 
         private const val TAG = "NotificationAdapter"
 
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NotificationResponse>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NotificationEntity>() {
             override fun areItemsTheSame(
-                oldItem: NotificationResponse,
-                newItem: NotificationResponse
+                oldItem: NotificationEntity,
+                newItem: NotificationEntity
             ): Boolean {
-                return oldItem.storeName == newItem.storeName
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: NotificationResponse,
-                newItem: NotificationResponse
+                oldItem: NotificationEntity,
+                newItem: NotificationEntity
             ): Boolean {
                 return oldItem == newItem
             }
@@ -55,31 +56,19 @@ class NotificationAdapter :
     }
 
     class NotificationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(message: NotificationResponse) {
-            if (message.type.contains("low", ignoreCase = true)) {
-                val description = itemView.context.getString(
-                    R.string.desc_notification_low_stock,
-                    message.storeName,
-                    message.productName
-                )
-
-                itemView.findViewById<TextView>(R.id.tv_title_notification_item).text = "Low Stock"
+        fun bind(message: NotificationEntity) {
+            if (message.tipe == NotificationType.LOW_STOCK.toString()) {
+                itemView.findViewById<TextView>(R.id.tv_title_notification_item).text =
+                    message.judul
                 itemView.findViewById<TextView>(R.id.tv_description_notification_item).text =
-                    description
+                    message.isi
                 itemView.findViewById<ImageView>(R.id.item_notification_img)
                     .setImageResource(R.drawable.img_notif_lows_stock)
-            } else if (message.type.contains("expired", ignoreCase = true)) {
-                val description =
-                    itemView.context.getString(
-                        R.string.desc_notification_expired_stock,
-                        message.storeName,
-                        message.productName
-                    )
-
+            } else {
                 itemView.findViewById<TextView>(R.id.tv_title_notification_item).text =
-                    "Expired Stock"
+                    message.judul
                 itemView.findViewById<TextView>(R.id.tv_description_notification_item).text =
-                    description
+                    message.isi
                 itemView.findViewById<ImageView>(R.id.item_notification_img)
                     .setImageResource(R.drawable.img_notif_expired_stock)
             }

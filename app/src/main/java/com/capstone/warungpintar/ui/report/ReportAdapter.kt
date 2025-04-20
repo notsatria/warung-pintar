@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.warungpintar.data.remote.model.response.ReportResponse
 import com.capstone.warungpintar.databinding.ItemReportRowBinding
+import com.capstone.warungpintar.utils.toStrDate
 
 class ReportAdapter : ListAdapter<ReportItem, ReportAdapter.ReportViewHolder>(DIFF_CALLBACK) {
 
@@ -59,7 +60,7 @@ class ReportAdapter : ListAdapter<ReportItem, ReportAdapter.ReportViewHolder>(DI
                 tvProductNameRow.text = data.namaBarang
                 tvPurchasePriceRowValue.text = "Rp.$purchasePrice"
                 tvSellingPriceRowValue.text = "Rp. $sellingPrice"
-                tvExitDateRow.text = "Tanggal keluar: ${data.tanggalKeluar}"
+                tvExitDateRow.text = "Tanggal keluar: ${data.tanggalKeluar.toStrDate()}"
 
                 tvProfitProductRow.text = "Rp. ${data.total}"
             }
@@ -74,5 +75,5 @@ data class ReportItem(
     val hargaBeli: Int,
     val total: Int,
     val jumlah: Int,
-    val tanggalKeluar: String,
+    val tanggalKeluar: Long,
 )

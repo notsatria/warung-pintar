@@ -20,6 +20,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.capstone.warungpintar.R
 import com.capstone.warungpintar.data.ResultState
+import com.capstone.warungpintar.data.local.entities.ProductEntity
 import com.capstone.warungpintar.data.remote.model.request.ProductRequest
 import com.capstone.warungpintar.databinding.ActivityAddProductInBinding
 import com.capstone.warungpintar.databinding.DialogResultScannerLayoutBinding
@@ -113,9 +114,15 @@ class AddProductInActivity : AppCompatActivity() {
                 val adapter = ArrayAdapter(
                     this@AddProductInActivity,
                     android.R.layout.simple_list_item_1,
-                    it.map { it.nama })
+                    it.map { it.nama }
+                )
                 namabaranglEditText.setAdapter(adapter)
             }
+        }
+
+        namabaranglEditText.setOnItemClickListener { parent, view, position, id ->
+            val selectedProductName = parent.getItemAtPosition(position) as String
+            viewModel.selectedProductName = selectedProductName
         }
 
         btnAddproductClose.setOnClickListener {
@@ -301,7 +308,7 @@ class AddProductInActivity : AppCompatActivity() {
         }
 
         etExpiredDate.setOnClickListener {
-            showDateDialog { view, year, month, dayOfMonth ->
+            showDateDialog(true) { view, year, month, dayOfMonth ->
                 val selectedDate = "$dayOfMonth/${month + 1}/$year"
 
                 etExpiredDate.setText(selectedDate)
@@ -351,7 +358,10 @@ class AddProductInActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun showDateDialog(onDateSetListener: DatePickerDialog.OnDateSetListener) {
+    private fun showDateDialog(
+        isOnExpired: Boolean = false,
+        onDateSetListener: DatePickerDialog.OnDateSetListener
+    ) {
         val year = Calendar.getInstance().get(Calendar.YEAR)
         val month = Calendar.getInstance().get(Calendar.MONTH)
         val dayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
@@ -364,7 +374,7 @@ class AddProductInActivity : AppCompatActivity() {
             dayOfMonth
         )
 
-        datePickerDialog.datePicker.minDate = System.currentTimeMillis()
+        if (!isOnExpired) datePickerDialog.datePicker.minDate = System.currentTimeMillis()
 
         datePickerDialog.show()
     }

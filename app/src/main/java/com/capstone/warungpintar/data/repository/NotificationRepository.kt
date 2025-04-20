@@ -1,55 +1,23 @@
 package com.capstone.warungpintar.data.repository
 
-import android.util.Log
-import com.capstone.warungpintar.data.ResultState
-import com.capstone.warungpintar.data.remote.api.ApiNotificationService
-import com.capstone.warungpintar.data.remote.model.response.ErrorResponse
-import com.capstone.warungpintar.data.remote.model.response.NotificationResponse
-import com.capstone.warungpintar.data.remote.model.response.ResponseAPI
-import com.google.gson.Gson
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import retrofit2.HttpException
-import java.net.SocketTimeoutException
+import android.content.Context
+import com.capstone.warungpintar.data.local.entities.NotificationDao
+import com.capstone.warungpintar.data.local.entities.NotificationEntity
+import com.capstone.warungpintar.worker.InstanceWorker
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class NotificationRepository(
-    private val apiNotificationService: ApiNotificationService
+class NotificationRepository @Inject constructor(
+    private val notificationDao: NotificationDao,
+    @ApplicationContext private val context: Context
 ) {
 
-    companion object {
-        private const val TAG = "NotificationRepository"
-
-        @Volatile
-        private var instance: NotificationRepository? = null
-        fun getInstance(apiNotificationService: ApiNotificationService) =
-            instance ?: synchronized(this) {
-                instance ?: NotificationRepository(apiNotificationService)
-            }.also { instance = it }
+    suspend fun insertNotification(notification: NotificationEntity) {
+        notificationDao.insert(notification)
+        InstanceWorker.startNotificationWorker(context)
     }
 
-    fun getListNotification(email: String): Flow<ResultState<List<NotificationResponse>>> = flow {
-        emit(ResultState.Loading)
+    fun getNotifications() =
+        notificationDao.getAllNotifications()
 
-        try {
-            val response: ResponseAPI<List<NotificationResponse>> =
-                apiNotificationService.getListHistory(email)
-            emit(ResultState.Success(response.data))
-        } catch (e: HttpException) {
-            val errorMessage: String = if (e.code() >= 500) {
-                "Terjadi kesalahan server, coba lagi nanti"
-            } else {
-                val jsonString = e.response()?.errorBody()?.string()
-                val error: ErrorResponse = Gson().fromJson(jsonString, ErrorResponse::class.java)
-                error.message
-            }
-            emit(ResultState.Error(errorMessage))
-            Log.d(TAG, "get notification error: ${e.message}, with response $errorMessage")
-        } catch (e: SocketTimeoutException) {
-            Log.d(TAG, "get notification error: ${e.message}")
-            emit(ResultState.Error("Gagal terhubung dengan server"))
-        } catch (e: Exception) {
-            Log.d(TAG, "get notification error: ${e.message}")
-            emit(ResultState.Error("Terjadi kesalahan, silakan coba lagi nanti"))
-        }
-    }
 }

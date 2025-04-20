@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
@@ -86,9 +87,11 @@
         <activity
             android:name=".ui.deleteproduct.DeleteProductOutActivity"
             android:exported="false" />
-        <activity android:name=".ui.newsproduct.ListNewsActivity"
+        <activity
+            android:name=".ui.newsproduct.ListNewsActivity"
             android:exported="false" />
-        <activity android:name=".ui.newsproduct.DetailNewsActivity"
+        <activity
+            android:name=".ui.newsproduct.DetailNewsActivity"
             android:exported="false" />
 
         <meta-data
@@ -103,6 +106,17 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
+        </provider>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
         </provider>
     </application>
 

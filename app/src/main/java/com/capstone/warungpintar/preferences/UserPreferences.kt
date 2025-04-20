@@ -20,6 +20,7 @@ class UserPreferences(private val dataStore: DataStore<Preferences>) {
     companion object {
         private val USER_LOGGED_IN_KEY = booleanPreferencesKey("user_logged_in")
         private val USER_EMAIL_KEY = stringPreferencesKey("user_email")
+        private val USER_WARUNG_KEY = stringPreferencesKey("user_warung")
     }
 
     fun getUserEmail(): Flow<String> {
@@ -46,6 +47,20 @@ class UserPreferences(private val dataStore: DataStore<Preferences>) {
         CoroutineScope(Dispatchers.IO).launch {
             dataStore.edit { preferences ->
                 preferences[USER_LOGGED_IN_KEY] = isLoggedIn
+            }
+        }
+    }
+
+    fun getUserWarung(): Flow<String> {
+        return dataStore.data.map { preferences ->
+            preferences[USER_WARUNG_KEY] ?: ""
+        }
+    }
+
+    fun setUserWarung(warung: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            dataStore.edit { preferences ->
+                preferences[USER_WARUNG_KEY] = warung
             }
         }
     }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.capstone.warungpintar.R
 import com.capstone.warungpintar.data.remote.model.response.HistoryResponse
 import com.capstone.warungpintar.databinding.ItemHistoryProductRowBinding
+import com.capstone.warungpintar.utils.toStrDate
 
 class ProductHistoryAdapter :
     ListAdapter<HistoryItem, ProductHistoryAdapter.ProductHistoryViewHolder>(DIFF_CALLBACK) {
@@ -60,7 +61,7 @@ class ProductHistoryAdapter :
                     imgHistoryProduct.setImageResource(R.drawable.img_product_out)
                     tvTitleHistoryItem.text = data.namaBarang
                     tvPriceItem.text = "Harga Jual Rp.${data.harga}"
-                    tvDateItem.text = "Tanggal Keluar ${data.tanggal}"
+                    tvDateItem.text = "Tanggal Keluar ${data.tanggal.toStrDate()}"
                     tvAmountItem.text = data.jumlah.toString()
                 }
             } else {
@@ -68,7 +69,7 @@ class ProductHistoryAdapter :
                     imgHistoryProduct.setImageResource(R.drawable.img_product_in)
                     tvTitleHistoryItem.text = data.namaBarang
                     tvPriceItem.text = "Harga Beli Rp.${data.harga}"
-                    tvDateItem.text = "Tanggal Masuk ${data.tanggal}"
+                    tvDateItem.text = "Tanggal Masuk ${data.tanggal.toStrDate()}"
                     tvAmountItem.text = data.jumlah.toString()
                 }
             }
@@ -82,7 +83,7 @@ data class HistoryItem(
     val namaBarang: String,
     val harga: String,
     val jumlah: Int,
-    val tanggal: String,
+    val tanggal: Long,
     val tipe: HistoryType
 )
 

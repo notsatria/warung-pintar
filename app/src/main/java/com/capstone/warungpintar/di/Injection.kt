@@ -15,12 +15,6 @@ object Injection {
         return ProductRepositoryOld.getInstance(apiProductService)
     }
 
-    fun provideNotificationRepository(): NotificationRepository {
-        val apiNotificationService =
-            ApiConfig.getApiConfig().create(ApiNotificationService::class.java)
-        return NotificationRepository.getInstance(apiNotificationService)
-    }
-
     fun provideDashboardRepository(): DashboardRepository {
         val apiService = ApiConfig.getApiConfig().create(ApiDashboardService::class.java)
         return DashboardRepository.getInstance(apiService)

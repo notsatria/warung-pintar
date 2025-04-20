@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 data class ProductOutEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val barangId: Int,
-    val tanggalKeluar: String,
+    val tanggalKeluar: Long,
     val jumlah: Int,
     val hargaJual: Int
 )
