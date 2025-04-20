@@ -95,4 +95,6 @@ class ProductRepository @Inject constructor(
     }
 
     suspend fun getProductByName(name: String) = productDao.getProductByName(name)
+
+    suspend fun deleteProduct(product: ProductEntity) = productDao.delete(product)
 }

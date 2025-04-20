@@ -50,21 +50,23 @@ class DeleteProductViewModel @Inject constructor(
                         jumlah = jumlah,
                         hargaJual = hargaJual
                     )
-                    val res = productRepository.insertProductOut(productOut)
+                    productRepository.insertProductOut(productOut)
 
-                    productRepository.updateProduct(
-                        selectedProduct!!.copy(jumlah = selectedProduct!!.jumlah - jumlah),
-                        isOnProductOut = true,
-                        tglKeluar
-                    )
+                    val updatedJumlahBarang = selectedProduct!!.jumlah - jumlah
 
-                    if (res > 0) {
-                        productOutState.postValue(
-                            ResultState.Success("Berhasil menambah barang keluar")
-                        )
+                    if (updatedJumlahBarang <= 0) {
+                        productRepository.deleteProduct(selectedProduct!!)
                     } else {
-                        productOutState.postValue(ResultState.Error("Gagal menambah barang keluar"))
+                        productRepository.updateProduct(
+                            selectedProduct!!.copy(jumlah = updatedJumlahBarang),
+                            isOnProductOut = true,
+                            tglKeluar
+                        )
                     }
+
+                    productOutState.postValue(
+                        ResultState.Success("Berhasil menambah barang keluar")
+                    )
                 }
             } catch (e: Exception) {
                 Timber.e("Error on insertProductOut: ${e.message}")

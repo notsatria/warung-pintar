@@ -1,6 +1,7 @@
 package com.capstone.warungpintar.data.local.entities
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Insert
@@ -98,4 +99,7 @@ interface ProductDao {
 
     @Query("SELECT * FROM product WHERE LOWER(nama) LIKE '%' || LOWER(:name) || '%'")
     suspend fun getProductByName(name: String): ProductEntity
+
+    @Delete
+    suspend fun delete(product: ProductEntity)
 }

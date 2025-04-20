@@ -31,6 +31,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class DashboardProduct : AppCompatActivity() {
@@ -214,11 +215,7 @@ class DashboardProduct : AppCompatActivity() {
             ContextCompat.checkSelfPermission(
                 this, Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED -> {
-                Toast.makeText(
-                    this@DashboardProduct,
-                    "Notification permission granted",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Timber.d("Notification permission granted")
             }
 
             else -> {
